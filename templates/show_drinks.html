@@ -1,0 +1,36 @@
+{% extends 'base.html'  %}
+
+{% block content %}
+<h1>Drink Recipes</h1>
+
+<form method="POST">
+    {{ form.hidden_tag() }}
+
+    {% for field in form if field.widget.input_type != 'hidden'%}
+    <div class="form-group">
+      {{field.label}}
+      {{field(class_="form-control")}}
+      {% for err in field.errors %}
+      <small class="form-text text-danger">
+        {{err}}
+      </small>
+      {% endfor %}
+    </div>
+    {% endfor %}
+    <button class="btn  btn-success  btn-lg">Submit</button>
+    <a href="/drinks" class="btn btn-danger btn-lg">Go Back</a>
+  </form>
+<ul id="drinks">
+  {% for drink in drinks %}
+    <li> <a href="/drinks"> {{drink.text}} </a></li>
+    <!-- {% if drink.Favorites == True %}
+    <span>Favorites</span>
+    {% elif drink.Want_To_Try == True %}
+    <span>Want To Try</span>
+    {% elif drink.Purchase_Ingredients == True %}
+    <span>Purchase Ingredients</span>
+    {% endif %} -->
+    
+    {% endfor %}
+</ul>
+  {% endblock %}

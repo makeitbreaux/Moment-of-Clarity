@@ -1,7 +1,6 @@
 {% extends 'base.html'  %}
 
 {% block content %}
-<h1>To Do List</h1>
 
 <form method="POST">
     {{ form.hidden_tag() }}
@@ -18,17 +17,10 @@
     </div>
     {% endfor %}
     <button class="btn  btn-success  btn-lg">Submit</button>
-    <a href="/todos" class="btn btn-danger btn-lg">Go Back</a>
+    <a href="/add_drink" class="btn btn-danger btn-lg">Go Back</a>
   </form>
-<ul id="todos">
-  {% for todo in todos %}
-    <li> {{todo.text}} </li>
-    {% if todo.complete == False %}
-    <span>Not Complete</span>
-    {% else %}
-    <span>Completed</span>
-    {% endif %}
-    
-    {% endfor %}
-</ul>
-  {% endblock %}
+
+
+
+
+{% endblock %}

@@ -1,6 +1,48 @@
 {% extends 'base.html'  %}
 
 {% block content %}
-<h1>To Do List</h1>
+<h1>Welcome to your AF Recipe Catalogue!</h1>
 
+<div class="container">
+
+    <h2 class="text-center display-3">Drinks List</h2>
+    <div class="row justify-content-center">
+      <div class="col-6">
+        <ul class="list-group">
+          <!-- {% for drink in drinks %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">{{drink.name}} - <button
+              class="delete-drink btn-sm btn-danger"
+              data-id="{{drink.id}}">X</button></li>
+          {% endfor %} -->
+
+            <a href="/add_drink">Add Drink</a>
+
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"
+    integrity="sha256-T/f7Sju1ZfNNfBh7skWn0idlCBcI3RwdLSS4/I7NQKQ=" crossorigin="anonymous"></script>
+  <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
+  <script src="static/drinks.js"></script>
+
+
+<!-- <ul id="drinks">
+    {% for drink in drinks %}
+      <li> <a href="/drinks/<int:id>"> {{drink.text}} </a></li>
+      <!-- {% if drink.Favorites == True %}
+      <span>Favorites</span>
+      {% elif drink.Want_To_Try == True %}
+      <span>Want To Try</span>
+      {% elif drink.Purchase_Ingredients == True %}
+      <span>Purchase Ingredients</span>
+      {% endif %} --> -->
+      
+      {% endfor %}
+  </ul>
 {% endblock %}

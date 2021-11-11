@@ -16,61 +16,112 @@ def connect_db(app):
 
     
 class User(db.Model):
-    
+    """User Model"""
     __tablename__ = 'users'
     
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, 
+                   primary_key=True, 
+                   autoincrement=True)
     
-    username = db.Column(db.Text, nullable=False, unique=True)
+    username = db.Column(db.Text, 
+                         nullable=False, 
+                         unique=True)
     
-    first_name = db.Column(db.Text, nullable=False)
+    first_name = db.Column(db.Text, 
+                           nullable=False)
     
-    last_name = db.Column(db.Text, nullable=False)
+    last_name = db.Column(db.Text, 
+                          nullable=False)
     
-    password = db.Column(db.Text, nullable=False)
+    password = db.Column(db.Text, 
+                         nullable=False)
     
-    email = db.Column(db.Text, nullable=False)
-    # todo = db.relationship('Todo', backref="users")
+    email = db.Column(db.Text, 
+                      nullable=False,)
+    
+    # drinks = db.relationship('Drink', backref="users")
+    
+    drinks = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id', ondelete="cascade"),
+        primary_key=True,
+    ), db.relationship('Drink', backref="users")
     
     @classmethod
-    def register(cls, username, pwd, first_name, last_name, email):
+    def register(cls, username, password, first_name, last_name, email):
         """Register user w/hashed password & return user."""
 
-        hashed = bcrypt.generate_password_hash(pwd)
-        # turn bytestring into normal (unicode utf8) string
-        hashed_utf8 = hashed.decode("utf8")
+        hashed_pwd = bcrypt.generate_password_hash(password).decode("UTF-8")
 
-        # return instance of user w/username and hashed pwd
-        return cls(username=username, password=hashed_utf8, first_name=first_name, last_name=last_name, email=email)
+        user = User(
+            username=username,
+            email=email,
+            password=hashed_pwd,
+            first_name = first_name,
+            last_name = last_name
+        )
+
+        db.session.add(user)
+        return user
+        # # return instance of user w/username and hashed pwd
+        # return cls(username=username, password=hashed_utf8, first_name=first_name, last_name=last_name, email=email)
 
     @classmethod
-    def authenticate(cls, username, pwd):
-        """Validate that user exists & password is correct.
+    def authenticate(cls, username, password):
+        """Find user with `username` and `password`.
 
-        Return user if valid; else return False.
+        This is a class method (call it on the class, not an individual user.)
+        It searches for a user whose password hash matches this password
+        and, if it finds such a user, returns that user object.
+
+        If can't find matching user (or if password is wrong), returns False.
         """
 
-        u = User.query.filter_by(username=username).first()
+        user = cls.query.filter_by(username=username).first()
 
-        if u and bcrypt.check_password_hash(u.password, pwd):
-            # return user instance
-            return u
-        else:
-            return False
+        if user:
+            is_auth = bcrypt.check_password_hash(user.password, password)
+            if is_auth:
+                return user
 
-class Todo(db.Model):
-    __tablename__ = 'todos'
+        return False
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    text = db.Column(db.Text, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'),nullable=False) 
+
+class Drink(db.Model):
+    """Drinks Model"""
+    __tablename__ = 'drinks'
+
+    id = db.Column(db.Integer, 
+                   primary_key=True, 
+                   autoincrement=True)
     
-    user = db.relationship('User', backref="todos")
+    name = db.Column(db.String)
+    
+    user_id = db.Column(db.Integer, 
+                        db.ForeignKey('users.id')) 
+    
+    ingredients = db.Column(db.String)
+    
+    image_url = db.Column(db.String)
+    
+    user = db.relationship('User', backref="drinks")
+    
+    def serialize(self):
+        """Returns a dict representation of drink which we can turn into JSON"""
+        return {
+            'id': self.id,
+            'name': self.name,
+            'ingredients': self.ingredients,
+            'image_url': self.image_url
+        }
+
+    def __repr__(self):
+        return f"<Drink {self.id} name={self.name} ingredients={self.ingredients}, image_url={self.image_url}>"
     
     @classmethod
     def get_text(text):
-        """Get text from Todo field"""
+        """Get text from Drink field"""
         
-        text = Todo.get_text(text=text)
+        text = Drink.get_text(text=text)
         
         return text(text=text)
