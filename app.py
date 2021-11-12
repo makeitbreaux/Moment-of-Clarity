@@ -41,15 +41,31 @@ def index_page():
 
 # QUERIES API AND RETURNS SPECIFIED INFO
 @app.route('/drink_name', methods=["GET", "POST"])
-def get_drink_name():
-    """Return drink name for given drink"""
+def get_drink():
+    """Return drink for specified drink"""
     key = '9973533'
     strDrink = request.form["strDrink"]
     res = requests.get(f"{API_BASE_URL}/search.php?s={strDrink}",
                        params={'key': key, 'strDrink': strDrink})
     data = res.json()
-    drink = data["drinks"][0]["strDrink"]
-
+    name = data["drinks"][0]["strDrink"]
+    tags = data["drinks"][0]["strTags"]
+    category = data["drinks"][0]["strCategory"]
+    alcoholic = data["drinks"][0]["strAlcoholic"]
+    glass = data["drinks"][0]["strGlass"]
+    instructions = data["drinks"][0]["strInstructions"]
+    ingredient1 = data["drinks"][0]["strIngredient1"]
+    ingredient2 = data["drinks"][0]["strIngredient2"]
+    ingredient3 = data["drinks"][0]["strIngredient3"]
+    ingredient4 = data["drinks"][0]["strIngredient4"]
+    ingredient5 = data["drinks"][0]["strIngredient5"]
+    measure1 = data["drinks"][0]["strMeasure1"]
+    measure2 = data["drinks"][0]["strMeasure2"]
+    measure3 = data["drinks"][0]["strMeasure3"]
+    measure4 = data["drinks"][0]["strMeasure4"]
+    measure5 = data["drinks"][0]["strMeasure5"]
+    image = data["drinks"][0]["strDrinkThumb"]
+    drink = {'name': name, 'tags':tags, 'category': category,'alcoholic': alcoholic, 'glass': glass, 'instructions': instructions, 'ingredient1': ingredient1, 'ingredient2': ingredient2, 'ingredient3': ingredient3, 'ingredient4': ingredient4, 'ingredient5': ingredient5, 'measure1': measure1, 'measure2': measure2, 'measure3': measure3, 'measure4': measure4, 'measure5': measure5, 'image': image}
     return render_template('show_drinks.html', drink=drink)
 
 # ****** THESE WERE CREATED WITH ADDING YOUR OWN DRINKS IN MIND, RETURN TO THIS LATER ******

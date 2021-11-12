@@ -1,10 +1,40 @@
 {% extends 'base.html'  %}
 
 {% block content %}
-<h1>Drink Recipes</h1>
+
 
 {% if drink %}
-<h1> {{drink}} </h1>
+<div class="container">
+  <div class="row align-items-center">
+    <div class="col">
+<div class="card" style="width: 50rem;">
+  <img src="{{drink['image']}}" class="card-img-top" alt="...">
+  <div class="card-body">
+    <div class="card-title"><h3> {{drink['name']}} </h3> </div>
+    <p class="card-text">Instructions: {{drink['instructions']}} </p>
+    </div>
+<ul class="list-group list-group-flush"> 
+  <li class="list-group-item">Tags: {{drink['tags']}} </li> 
+  <li class="list-group-item">Category: {{drink['category']}} </li>
+  <li class="list-group-item">Alcoholic: {{drink['alcoholic']}} </li>
+  <li class="list-group-item">Glass: {{drink['glass']}} </li>
+  <li class="list-group-item">Ingredient 1: {{drink['ingredient1']}} </li>
+  <li class="list-group-item">Ingredient 2: {{drink['ingredient2']}} </li>
+  <li class="list-group-item">Ingredient 3: {{drink['ingredient3']}} </li>
+  <li class="list-group-item">Ingredient 4: {{drink['ingredient4']}} </li>
+  <li class="list-group-item">Ingredient 5: {{drink['ingredient5']}} </li>
+  <li class="list-group-item">Measure 1: {{drink['measure1']}} </li>
+  <li class="list-group-item">Measure 2: {{drink['measure2']}} </li>
+  <li class="list-group-item">Measure 3: {{drink['measure3']}} </li>
+  <li class="list-group-item">Measure 4: {{drink['measure4']}} </li>
+  <li class="list-group-item">Measure 5: {{drink['measure5']}} </li>
+  <!-- <li>Image: {{drink['image']}} </li> -->
+</ul>
+</div>
+</div>
+</div>
+</div>
+
 {% endif %}
 
 {% endblock %}
