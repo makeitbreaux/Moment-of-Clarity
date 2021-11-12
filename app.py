@@ -28,129 +28,123 @@ toolbar = DebugToolbarExtension(app)
 
 ### API STUFF
 # BASE URL FOR SEARCH  http://www.thecocktaildb.com/api/json/v1/1/search.php?s=
-def get_drink_name(name):
-    """Return drink name for given drink"""
-    key = '9973533'
-    res = requests.get(f"{API_BASE_URL}/search.php?s={name}",
-                       params={'key': key, 'strDrink': name})
-    data = res.json()
-    drink = data["results"][0]
+
+    # data = res.json()
+    # drink = data["results"][0]
     
-    return drink
+    # return drink
 
 @app.route('/')
 def index_page():
     drinks = Drink.query.all()
     return render_template('index.html', drinks=drinks)
 
+# QUERIES API AND RETURNS SPECIFIED INFO
+@app.route('/drink_name', methods=["GET", "POST"])
+def get_drink_name():
+    """Return drink name for given drink"""
+    key = '9973533'
+    strDrink = request.form["strDrink"]
+    res = requests.get(f"{API_BASE_URL}/search.php?s={strDrink}",
+                       params={'key': key, 'strDrink': strDrink})
+    data = res.json()
+    drink = data["drinks"][0]["strDrink"]
 
-@app.route('/api/drinks')
-def list_all_drinks():
-    """Return JSON w/ all drinks"""
+    return render_template('show_drinks.html', drink=drink)
 
-    all_drinks = [drink.serialize() for drink in Drink.query.all()]
-    return jsonify(drinks=all_drinks)
+# ****** THESE WERE CREATED WITH ADDING YOUR OWN DRINKS IN MIND, RETURN TO THIS LATER ******
+# @app.route('/api/drinks')
+# def list_all_drinks():
+#     """Return JSON w/ all drinks"""
 
-@app.route('/api/drinks/<int:id>')
-def get_drink(id):
-    """Returns JSON for one drink in particular"""
-    drink = Drink.query.get_or_404(id)
-    return jsonify(drink=drink.serialize())
+#     all_drinks = [drink.serialize() for drink in Drink.query.all()]
+#     return jsonify(drinks=all_drinks)
 
-@app.route('/drink', methods=["GET", "POST"])
-def create_drink():
-    """Creates a new drink from form data and returns JSON of that created drink"""
-    
-    name = request.json["name"]
-    ingredients = request.json["ingredients"]
-    image_url = request.json["image_url"]
-    
-    new_drink = Drink(name=name, ingredients=ingredients, image_url=image_url)
-    
-    db.session.add(new_drink)
-    db.session.commit()
-
-    response_json = jsonify(drink=new_drink.serialize())
-    return (response_json, 201)
-
-    # return render_template("add_drink.html")
-
-@app.route('/api/drinks/<int:id>', methods=["PATCH"])
-def update_drink(id):
-    """Updates a particular drink and responds w/ JSON of that updated drink"""
-    drink = Drink.query.get_or_404(id)
-    # MAY NEED FORM TO EDIT DRINK, HAVE TO CHANGE THIS CODE
-    # form = DrinkEditForm(obj=drink)
-    drink.name = request.json.get('name', drink.name)
-    drink.ingredients = request.json.get('ingredients', drink.ingredients)
-    drink.image = request.json.get('image', drink.image)
-    db.session.commit()
-    return jsonify(drink=drink.serialize())
-
-@app.route('/api/drinks/<int:id>', methods=["DELETE"])
-def delete_drink(id):
-    """Deletes a particular drink"""
-    drink = Drink.query.get_or_404(id)
-    db.session.delete(drink)
-    db.session.commit()
-    return jsonify(message="deleted")
-
-@app.route('/add_drink', methods=["GET", "POST"])
-def add_drinks():
-    # drink = Drink.query.get_or_404(id)
-    form = DrinkAddForm()
-    name = db.session.query(Drink.name)
-    ingredients = db.session.query(Drink.ingredients)
-    image_url = db.session.query(Drink.image_url)
-
-    new_drink = Drink(name=name, ingredients=ingredients, image_url=image_url)
-    
-    if form.validate_on_submit():
-        Drink.name = form.name.data
-        Drink.ingredients = form.ingredients.data
-        Drink.image_url = form.image_url.data
-        db.session.add(new_drink)
-        db.session.commit()
-        return redirect('/add_drink')
-    else:
-        return render_template("show_drinks.html", form=form, name=name, ingredients=ingredients, image_url=image_url)
-    
-    
-@app.route('/show_drinks', methods=['GET'])
-def show_drinks():
-    """Shows all Drinks"""
-    if "user_id" not in session:
-        flash("Please login first!", "danger")
-        return redirect('/')
-    form = DrinkEditForm()
-    all_drinks = Drink.query.all()
-    if form.validate_on_submit():
-        drink = form.drink.data
-        new_drink = Drink(drink=drink, user_id=session['user_id'])
-        db.session.add(new_drink)
-        db.session.commit()
-        flash('Drink Created!', 'success')
-        return redirect('/show_drinks')
-
-    return render_template("show_drinks.html", form=form, drinks=all_drinks)
-
-
-
-# @app.route('/drinks/<int:id>', methods=["POST"])
-# def delete_drink(id):
-#     """Delete drink"""
-#     if 'user_id' not in session:
-#         flash("Please login first!", "danger")
-#         return redirect('/login')
+# @app.route('/api/drinks/<int:id>')
+# def get_drink(id):
+#     """Returns JSON for one drink in particular"""
 #     drink = Drink.query.get_or_404(id)
-#     if drink.user_id == session['user_id']:
-#         db.session.delete(drink)
-#         db.session.commit()
-#         flash("Drink deleted!", "info")
-#         return redirect('/drinks')
-#     flash("You don't have permission to do that!", "danger")
-#     return redirect('/drinks')
+#     return jsonify(drink=drink.serialize())
 
+# #THIS CREATE_DRINK ONLY RETURNS JSON
+# @app.route('/drink', methods=["GET", "POST"])
+# def create_drink():
+#     """Creates a new drink from form data and returns JSON of that created drink"""
+    
+#     name = request.json["name"]
+#     ingredients = request.json["ingredients"]
+#     image_url = request.json["image_url"]
+    
+#     new_drink = Drink(name=name, ingredients=ingredients, image_url=image_url)
+    
+#     db.session.add(new_drink)
+#     db.session.commit()
+
+#     response_json = jsonify(drink=new_drink.serialize())
+#     return (response_json, 201)
+
+#     # return render_template("add_drink.html")
+
+# @app.route('/api/drinks/<int:id>', methods=["PATCH"])
+# def update_drink(id):
+#     """Updates a particular drink and responds w/ JSON of that updated drink"""
+#     drink = Drink.query.get_or_404(id)
+#     # MAY NEED FORM TO EDIT DRINK, HAVE TO CHANGE THIS CODE
+#     # form = DrinkEditForm(obj=drink)
+#     drink.name = request.json.get('name', drink.name)
+#     drink.ingredients = request.json.get('ingredients', drink.ingredients)
+#     drink.image = request.json.get('image', drink.image)
+#     db.session.commit()
+#     return jsonify(drink=drink.serialize())
+
+# @app.route('/api/drinks/<int:id>', methods=["DELETE"])
+# def delete_drink(id):
+#     """Deletes a particular drink"""
+#     drink = Drink.query.get_or_404(id)
+#     db.session.delete(drink)
+#     db.session.commit()
+#     return jsonify(message="deleted")
+
+# # THIS CREATE_DRINK WAS CREATED TO ADD YOUR OWN DRINK TO DB, NEED TO ADJUST
+# @app.route('/add_drink', methods=["GET", "POST"])
+# def add_drinks():
+#     # drink = Drink.query.get_or_404(id)
+#     form = DrinkAddForm()
+#     name = db.session.query(Drink.name)
+#     ingredients = db.session.query(Drink.ingredients)
+#     image_url = db.session.query(Drink.image_url)
+
+#     new_drink = Drink(name=name, ingredients=ingredients, image_url=image_url)
+    
+#     if form.validate_on_submit():
+#         Drink.name = form.name.data
+#         Drink.ingredients = form.ingredients.data
+#         Drink.image_url = form.image_url.data
+#         db.session.add(new_drink)
+#         db.session.commit()
+#         return redirect('/add_drink')
+#     else:
+#         return render_template("show_drinks.html", form=form, name=name, ingredients=ingredients, image_url=image_url)
+    
+# THIS IS A MESS, IDEK WHAT TO DO WITH THIS    
+
+# @app.route('/show_drinks', methods=['GET'])
+# def show_drinks():
+#     """Shows all Drinks"""
+#     if "user_id" not in session:
+#         flash("Please login first!", "danger")
+#         return redirect('/')
+#     form = DrinkEditForm()
+#     all_drinks = Drink.query.all()
+#     if form.validate_on_submit():
+#         drink = form.drink.data
+#         new_drink = Drink(drink=drink, user_id=session['user_id'])
+#         db.session.add(new_drink)
+#         db.session.commit()
+#         flash('Drink Created!', 'success')
+#         return redirect('/show_drinks')
+
+#     return render_template("show_drinks.html", form=form, drinks=all_drinks)
 
 ###############
 # USER REGISTER, LOGIN, LOGOUT
@@ -223,7 +217,10 @@ def login_user():
     return render_template('login.html', form=form)
 
 @app.route('/logout')
-def logout_user():
-    session.pop('user_id')
-    flash("Goodbye!", "info")
-    return redirect('/')
+def logout():
+    """Handle logout of user."""
+
+    do_logout()
+
+    flash("You have successfully logged out.", 'success')
+    return redirect("/login")

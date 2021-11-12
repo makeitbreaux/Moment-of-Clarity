@@ -17,7 +17,8 @@ class UserAddForm(FlaskForm):
     
     email = EmailField("Email", validators=[InputRequired()])
     
-# MAY NEED THIS FORM LATER 
+# ****** MAY NEED THIS FORM LATER *******
+ 
 # class UserEditForm(FlaskForm):
 #     """Form for editing users."""
 #     username = StringField("Username", validators=[InputRequired(), Length(min=1, max=30, message="Does Not Meet Length Requirements")])
@@ -38,7 +39,6 @@ class DrinkAddForm(FlaskForm):
     ingredients = TextAreaField("Ingredients", validators=[InputRequired(), Length(min=1, max=500)])
     
     image_url = URLField('(Optional) Image URL')
-    # add_to = SelectField("Add To:", choices=[('Favorites', 'Favorites'), ('Want To Try', 'Want To Try'), ('Purchase Ingredients', 'Purchase Ingredients')])
 
 class DrinkEditForm(FlaskForm):
     """Form for adding drinks."""

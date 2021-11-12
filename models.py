@@ -87,6 +87,7 @@ class User(db.Model):
         return False
 
 
+# NEED TO COMPLETELY REDO THIS TO MATCH THE INFO/VARS IN API
 class Drink(db.Model):
     """Drinks Model"""
     __tablename__ = 'drinks'
@@ -117,7 +118,8 @@ class Drink(db.Model):
 
     def __repr__(self):
         return f"<Drink {self.id} name={self.name} ingredients={self.ingredients}, image_url={self.image_url}>"
-    
+
+# NOT EVEN SURE IF I STILL NEED THIS OR NOT    
     @classmethod
     def get_text(text):
         """Get text from Drink field"""

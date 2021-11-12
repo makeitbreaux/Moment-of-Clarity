@@ -2,23 +2,23 @@
 
 {% block content %}
 
-<form method="POST">
-    {{ form.hidden_tag() }}
+<form method="POST" action="/show_drinks">
+  {{ form.hidden_tag() }}
 
-    {% for field in form if field.widget.input_type != 'hidden'%}
-    <div class="form-group">
-      {{field.label}}
-      {{field(class_="form-control")}}
-      {% for err in field.errors %}
-      <small class="form-text text-danger">
-        {{err}}
-      </small>
-      {% endfor %}
-    </div>
+  {% for field in form if field.widget.input_type != 'hidden'%}
+  <div class="form-group">
+    {{field.label}}
+    {{field(class_="form-control")}}
+    {% for err in field.errors %}
+    <small class="form-text text-danger">
+      {{err}}
+    </small>
     {% endfor %}
-    <button class="btn  btn-success  btn-lg">Submit</button>
-    <a href="/add_drink" class="btn btn-danger btn-lg">Go Back</a>
-  </form>
+  </div>
+  {% endfor %}
+  <button class="btn  btn-success  btn-lg">Submit</button>
+  <a href="/add_drink" class="btn btn-danger btn-lg">Go Back</a>
+</form>
 
 
 
