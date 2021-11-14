@@ -17,7 +17,7 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 CURR_USER_KEY = "curr_user"
 
-API_BASE_URL = "http://www.thecocktaildb.com/api/json/v2/1/"
+API_BASE_URL = "http://www.thecocktaildb.com/api/json/v2/9973533"
 
 connect_db(app)
 db.drop_all()
@@ -27,7 +27,7 @@ db.session.commit()
 toolbar = DebugToolbarExtension(app)
 
 ### API STUFF
-# BASE URL FOR SEARCH  http://www.thecocktaildb.com/api/json/v1/1/search.php?s=
+# BASE URL FOR SEARCH  http://www.thecocktaildb.com/api/json/v2/9973533/search.php?s=
 
     # data = res.json()
     # drink = data["results"][0]
@@ -59,14 +59,36 @@ def get_drink():
     ingredient3 = data["drinks"][0]["strIngredient3"]
     ingredient4 = data["drinks"][0]["strIngredient4"]
     ingredient5 = data["drinks"][0]["strIngredient5"]
+    ingredient6 = data["drinks"][0]["strIngredient6"]
+    ingredient7 = data["drinks"][0]["strIngredient7"]
+    ingredient8 = data["drinks"][0]["strIngredient8"]
+    ingredient9 = data["drinks"][0]["strIngredient9"]
+    ingredient10 = data["drinks"][0]["strIngredient10"]
+    ingredient11 = data["drinks"][0]["strIngredient11"]
+    ingredient12 = data["drinks"][0]["strIngredient12"]
+    ingredient13 = data["drinks"][0]["strIngredient13"]
+    ingredient14 = data["drinks"][0]["strIngredient14"]
+    ingredient15 = data["drinks"][0]["strIngredient15"]
     measure1 = data["drinks"][0]["strMeasure1"]
     measure2 = data["drinks"][0]["strMeasure2"]
     measure3 = data["drinks"][0]["strMeasure3"]
     measure4 = data["drinks"][0]["strMeasure4"]
     measure5 = data["drinks"][0]["strMeasure5"]
+    measure6 = data["drinks"][0]["strMeasure6"]
+    measure7 = data["drinks"][0]["strMeasure7"]
+    measure8 = data["drinks"][0]["strMeasure8"]
+    measure9 = data["drinks"][0]["strMeasure9"]
+    measure10 = data["drinks"][0]["strMeasure10"]
+    measure11 = data["drinks"][0]["strMeasure11"]
+    measure12 = data["drinks"][0]["strMeasure12"]
+    measure13 = data["drinks"][0]["strMeasure13"]
+    measure14 = data["drinks"][0]["strMeasure14"]
+    measure15 = data["drinks"][0]["strMeasure15"]
     image = data["drinks"][0]["strDrinkThumb"]
-    drink = {'name': name, 'tags':tags, 'category': category,'alcoholic': alcoholic, 'glass': glass, 'instructions': instructions, 'ingredient1': ingredient1, 'ingredient2': ingredient2, 'ingredient3': ingredient3, 'ingredient4': ingredient4, 'ingredient5': ingredient5, 'measure1': measure1, 'measure2': measure2, 'measure3': measure3, 'measure4': measure4, 'measure5': measure5, 'image': image}
-    return render_template('show_drinks.html', drink=drink)
+    drink = {'name': name, 'tags':tags, 'category': category,'alcoholic': alcoholic, 'glass': glass, 'instructions': instructions} 
+    ingredients = {'ingredient1': ingredient1, 'ingredient2': ingredient2, 'ingredient3': ingredient3, 'ingredient4': ingredient4, 'ingredient5': ingredient5, 'ingredient6': ingredient6, 'ingredient7': ingredient7, 'ingredient8': ingredient8, 'ingredient9': ingredient9, 'ingredient10': ingredient10, 'ingredient11': ingredient11, 'ingredient12': ingredient12, 'ingredient13': ingredient13, 'ingredient14': ingredient14, 'ingredient15': ingredient15} 
+    measures = {'measure1': measure1, 'measure2': measure2, 'measure3': measure3, 'measure4': measure4, 'measure5': measure5, 'measure6': measure6, 'measure7': measure7, 'measure8': measure8, 'measure9': measure9, 'measure10': measure10, 'measure11': measure11, 'measure12': measure12, 'measure13': measure13, 'measure14': measure14, 'measure15': measure15, 'image': image}
+    return render_template('show_drinks.html', drink=drink, ingredients = ingredients, measures=measures, image=image)
 
 # ****** THESE WERE CREATED WITH ADDING YOUR OWN DRINKS IN MIND, RETURN TO THIS LATER ******
 # @app.route('/api/drinks')

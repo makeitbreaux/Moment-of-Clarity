@@ -8,7 +8,7 @@
   <!-- <div class="row align-self-center">   -->
     <div class="row g-0">
       <div class="col-md-4" style="padding: 5%;">
-  <img src="{{drink['image']}}" style="width: 100%;" class="card-img-top" alt="...">
+  <img src="{{image}}" style="width: 100%;" class="card-img-top" alt="...">
   <h3 class="card-title"> {{drink['name']}} </h3>
   <p class="card-text">Instructions: {{drink['instructions']}} </p>
   </div>  
@@ -20,17 +20,24 @@
   <li class="list-group-item">Tags: {{drink['tags']}} </li> 
   <li class="list-group-item">Category: {{drink['category']}} </li>
   <li class="list-group-item">Alcoholic: {{drink['alcoholic']}} </li>
-  <li class="list-group-item">Glass: {{drink['glass']}} </li>
-  <li class="list-group-item">Ingredient 1: {{drink['ingredient1']}} </li>
-  <li class="list-group-item">Ingredient 2: {{drink['ingredient2']}} </li>
-  <li class="list-group-item">Ingredient 3: {{drink['ingredient3']}} </li>
-  <li class="list-group-item">Ingredient 4: {{drink['ingredient4']}} </li>
-  <li class="list-group-item">Ingredient 5: {{drink['ingredient5']}} </li>
-  <li class="list-group-item">Measure 1: {{drink['measure1']}} </li>
-  <li class="list-group-item">Measure 2: {{drink['measure2']}} </li>
-  <li class="list-group-item">Measure 3: {{drink['measure3']}} </li>
-  <li class="list-group-item">Measure 4: {{drink['measure4']}} </li>
-  <li class="list-group-item">Measure 5: {{drink['measure5']}} </li>
+  <li class="list-group-item ingredients">Glass: {{drink['glass']}} </li>
+  <!-- {% for ingredient in ingredients %}
+    {% if loop.changed(ingredient) %}
+  <li class="list-group-item">Ingredients: {{ingredient}} </li>
+      {% endif %}
+   {% endfor %} 
+   {% for measure in measures %}
+    {% if loop.changed(measure) %}
+  <li class="list-group-item">Measure: {{measure}} </li>
+  {% endif %}
+  {% endfor %}  -->
+    {% if ingredients %}
+    
+    {% for ingredient in ingredients %}
+        <li class="list-group-item">Ingredients: {{ingredient}} </li>
+    {% endfor %}
+    
+    {% endif %}
 </ul>
 </div>
 </div>
