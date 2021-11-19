@@ -96,14 +96,24 @@ class Drink(db.Model):
                    primary_key=True, 
                    autoincrement=True)
     
-    name = db.Column(db.String)
-    
     user_id = db.Column(db.Integer, 
                         db.ForeignKey('users.id')) 
     
+    name = db.Column(db.String)
+    
+    tags = db.Column(db.String)
+    
+    category = db.Column(db.String)
+    
+    glass = db.Column(db.String)
+    
+    instructions = db.Column(db.String)
+    
     ingredients = db.Column(db.String)
     
-    image_url = db.Column(db.String)
+    measures = db.Column(db.String)
+    
+    imageThumb = db.Column(db.String)
     
     user = db.relationship('User', backref="drinks")
     
@@ -112,12 +122,16 @@ class Drink(db.Model):
         return {
             'id': self.id,
             'name': self.name,
+            'category' : self.category,
+            'glass' : self.glass,
+            'instructions': self.instructions,
             'ingredients': self.ingredients,
-            'image_url': self.image_url
+            'measures': self.measures,
+            'imageThumb': self.imageThumb
         }
 
     def __repr__(self):
-        return f"<Drink {self.id} name={self.name} ingredients={self.ingredients}, image_url={self.image_url}>"
+        return f"<Drink {self.id}, name={self.name}, category={self.category}, glass={self.glass}, instructions={self.instructions}, ingredients={self.ingredients}, measures={self.measures}, imageThumb={self.imageThumb}>"
 
 # NOT EVEN SURE IF I STILL NEED THIS OR NOT    
     @classmethod

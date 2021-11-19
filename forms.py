@@ -36,17 +36,37 @@ class DrinkAddForm(FlaskForm):
     """Form for adding drinks."""
     name = StringField("Name", validators=[DataRequired()])
     
+    tags = StringField("Tags")
+    
+    category = StringField("Category")
+    
+    glass = StringField("Glass")
+    
+    instructions = TextAreaField("Instructions", validators=[InputRequired(), Length(min=1, max=1000)])
+    
     ingredients = TextAreaField("Ingredients", validators=[InputRequired(), Length(min=1, max=500)])
     
-    image_url = URLField('(Optional) Image URL')
+    measures = TextAreaField("Measures", validators=[InputRequired(), Length(min=1, max=500)])
+    
+    imageThumb = URLField('(Optional) Image URL')
 
 class DrinkEditForm(FlaskForm):
     """Form for adding drinks."""
     name = StringField("Name", validators=[DataRequired()])
     
+    tags = StringField("Tags")
+    
+    category = StringField("Category")
+    
+    glass = StringField("Glass")
+    
+    instructions = StringField("Instructions", validators=[DataRequired()])
+    
     ingredients = TextAreaField("Ingredients", validators=[InputRequired(), Length(min=1, max=500)])
     
-    image_url = StringField('(Optional) Image URL')
+    measures = TextAreaField("Measures", validators=[InputRequired(), Length(min=1, max=500)])
+    
+    imageThumb = StringField('(Optional) Image URL')
 
 class LoginForm(FlaskForm):
     """Login form."""

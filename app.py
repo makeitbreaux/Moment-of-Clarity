@@ -40,20 +40,23 @@ def index_page():
     return render_template('index.html', drinks=drinks)
 
 # QUERIES API AND RETURNS SPECIFIED INFO
-@app.route('/drink_name', methods=["GET", "POST"])
+@app.route('/drink', methods=["GET", "POST"])
 def get_drink():
-    """Return drink for specified drink"""
+    """Return name, tags, and category for specified drink"""
     key = '9973533'
     strDrink = request.form["strDrink"]
     res = requests.get(f"{API_BASE_URL}/search.php?s={strDrink}",
                        params={'key': key, 'strDrink': strDrink})
     data = res.json()
+    
+    id = data["drinks"][0]["idDrink"]
     name = data["drinks"][0]["strDrink"]
     tags = data["drinks"][0]["strTags"]
     category = data["drinks"][0]["strCategory"]
-    alcoholic = data["drinks"][0]["strAlcoholic"]
+    image = data["drinks"][0]["strDrinkThumb"]
     glass = data["drinks"][0]["strGlass"]
     instructions = data["drinks"][0]["strInstructions"]
+
     ingredient1 = data["drinks"][0]["strIngredient1"]
     ingredient2 = data["drinks"][0]["strIngredient2"]
     ingredient3 = data["drinks"][0]["strIngredient3"]
@@ -69,6 +72,7 @@ def get_drink():
     ingredient13 = data["drinks"][0]["strIngredient13"]
     ingredient14 = data["drinks"][0]["strIngredient14"]
     ingredient15 = data["drinks"][0]["strIngredient15"]
+   
     measure1 = data["drinks"][0]["strMeasure1"]
     measure2 = data["drinks"][0]["strMeasure2"]
     measure3 = data["drinks"][0]["strMeasure3"]
@@ -84,11 +88,15 @@ def get_drink():
     measure13 = data["drinks"][0]["strMeasure13"]
     measure14 = data["drinks"][0]["strMeasure14"]
     measure15 = data["drinks"][0]["strMeasure15"]
-    image = data["drinks"][0]["strDrinkThumb"]
-    drink = {'name': name, 'tags':tags, 'category': category,'alcoholic': alcoholic, 'glass': glass, 'instructions': instructions} 
-    ingredients = {'ingredient1': ingredient1, 'ingredient2': ingredient2, 'ingredient3': ingredient3, 'ingredient4': ingredient4, 'ingredient5': ingredient5, 'ingredient6': ingredient6, 'ingredient7': ingredient7, 'ingredient8': ingredient8, 'ingredient9': ingredient9, 'ingredient10': ingredient10, 'ingredient11': ingredient11, 'ingredient12': ingredient12, 'ingredient13': ingredient13, 'ingredient14': ingredient14, 'ingredient15': ingredient15} 
-    measures = {'measure1': measure1, 'measure2': measure2, 'measure3': measure3, 'measure4': measure4, 'measure5': measure5, 'measure6': measure6, 'measure7': measure7, 'measure8': measure8, 'measure9': measure9, 'measure10': measure10, 'measure11': measure11, 'measure12': measure12, 'measure13': measure13, 'measure14': measure14, 'measure15': measure15, 'image': image}
-    return render_template('show_drinks.html', drink=drink, ingredients = ingredients, measures=measures, image=image)
+    
+    measures = { measure1: measure1, measure2: measure2, measure3: measure3, measure4: measure4, measure5: measure5, measure6: measure6, measure7: measure7, measure8: measure8, measure9: measure9, measure10: measure10, measure11: measure11, measure12: measure12, measure13: measure13, measure14: measure14, measure15: measure15 }
+    
+   
+    ingredients = { ingredient1: ingredient1, ingredient2: ingredient2, ingredient3: ingredient3, ingredient4: ingredient4, ingredient5: ingredient5, ingredient6: ingredient6, ingredient7: ingredient7, ingredient8: ingredient8, ingredient9: ingredient9, ingredient10: ingredient10, ingredient11: ingredient11, ingredient12: ingredient12, ingredient13: ingredient13, ingredient14: ingredient14, ingredient15: ingredient15 } 
+
+    drink = {'id': id, 'name': name, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions}
+ 
+    return render_template('show_drinks.html', drink=drink, ingredients=ingredients, measures=measures)
 
 # ****** THESE WERE CREATED WITH ADDING YOUR OWN DRINKS IN MIND, RETURN TO THIS LATER ******
 # @app.route('/api/drinks')
@@ -144,46 +152,27 @@ def get_drink():
 #     return jsonify(message="deleted")
 
 # # THIS CREATE_DRINK WAS CREATED TO ADD YOUR OWN DRINK TO DB, NEED TO ADJUST
-# @app.route('/add_drink', methods=["GET", "POST"])
-# def add_drinks():
-#     # drink = Drink.query.get_or_404(id)
-#     form = DrinkAddForm()
-#     name = db.session.query(Drink.name)
-#     ingredients = db.session.query(Drink.ingredients)
-#     image_url = db.session.query(Drink.image_url)
+@app.route('/drink/new', methods=["GET", "POST"])
+def add_drink():
+    # drink = Drink.query.get_or_404(id)
+    form = DrinkAddForm()
+    drink = db.session.query(Drink.drink)
+    ingredients = db.session.query(Drink.ingredients)
+    measures = db.session.query(Drink.measures)
 
-#     new_drink = Drink(name=name, ingredients=ingredients, image_url=image_url)
+    new_drink = Drink(drink=drink, ingredients=ingredients, measures=measures)
     
-#     if form.validate_on_submit():
-#         Drink.name = form.name.data
-#         Drink.ingredients = form.ingredients.data
-#         Drink.image_url = form.image_url.data
-#         db.session.add(new_drink)
-#         db.session.commit()
-#         return redirect('/add_drink')
-#     else:
-#         return render_template("show_drinks.html", form=form, name=name, ingredients=ingredients, image_url=image_url)
+    if form.validate_on_submit():
+        Drink.drink = form.drink.data
+        Drink.ingredients = form.ingredients.data
+        Drink.measures = form.ingredients.data
+        db.session.add(new_drink)
+        db.session.commit()
+        flash('Drink Added')
+        return redirect('/add_drink')
+
+    return render_template("show_drinks.html", form=form, drink=drink, ingredients=ingredients, measures = measures)
     
-# THIS IS A MESS, IDEK WHAT TO DO WITH THIS    
-
-# @app.route('/show_drinks', methods=['GET'])
-# def show_drinks():
-#     """Shows all Drinks"""
-#     if "user_id" not in session:
-#         flash("Please login first!", "danger")
-#         return redirect('/')
-#     form = DrinkEditForm()
-#     all_drinks = Drink.query.all()
-#     if form.validate_on_submit():
-#         drink = form.drink.data
-#         new_drink = Drink(drink=drink, user_id=session['user_id'])
-#         db.session.add(new_drink)
-#         db.session.commit()
-#         flash('Drink Created!', 'success')
-#         return redirect('/show_drinks')
-
-#     return render_template("show_drinks.html", form=form, drinks=all_drinks)
-
 ###############
 # USER REGISTER, LOGIN, LOGOUT
 
