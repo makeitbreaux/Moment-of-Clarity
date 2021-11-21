@@ -44,13 +44,13 @@ def index_page():
 def get_drink():
     """Return name, tags, and category for specified drink"""
     key = '9973533'
-    strDrink = request.form["strDrink"]
-    res = requests.get(f"{API_BASE_URL}/search.php?s={strDrink}",
-                       params={'key': key, 'strDrink': strDrink})
+    name = request.form["name"]
+    res = requests.get(f"{API_BASE_URL}/search.php?s={name}",
+                       params={'key': key, 'strDrink': name})
     data = res.json()
     
     id = data["drinks"][0]["idDrink"]
-    name = data["drinks"][0]["strDrink"]
+    drinkName = data["drinks"][0]["strDrink"]
     tags = data["drinks"][0]["strTags"]
     category = data["drinks"][0]["strCategory"]
     image = data["drinks"][0]["strDrinkThumb"]
@@ -94,7 +94,7 @@ def get_drink():
    
     ingredients = { ingredient1: ingredient1, ingredient2: ingredient2, ingredient3: ingredient3, ingredient4: ingredient4, ingredient5: ingredient5, ingredient6: ingredient6, ingredient7: ingredient7, ingredient8: ingredient8, ingredient9: ingredient9, ingredient10: ingredient10, ingredient11: ingredient11, ingredient12: ingredient12, ingredient13: ingredient13, ingredient14: ingredient14, ingredient15: ingredient15 } 
 
-    drink = {'id': id, 'name': name, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions}
+    drink = {'id': id, 'name': drinkName, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions}
  
     return render_template('show_drinks.html', drink=drink, ingredients=ingredients, measures=measures)
 
@@ -152,26 +152,37 @@ def get_drink():
 #     return jsonify(message="deleted")
 
 # # THIS CREATE_DRINK WAS CREATED TO ADD YOUR OWN DRINK TO DB, NEED TO ADJUST
-@app.route('/drink/new', methods=["GET", "POST"])
+@app.route('/add_drink', methods=["GET", "POST"])
 def add_drink():
-    # drink = Drink.query.get_or_404(id)
-    form = DrinkAddForm()
-    drink = db.session.query(Drink.drink)
+    form = DrinkAddForm(obj=Drink)
+    drinkName = db.session.query(Drink.drinkName)
+    tags = db.session.query(Drink.tags)
+    category = db.session.query(Drink.category)
+    glass = db.session.query(Drink.glass)
+    instructions = db.session.query(Drink.instructions)
     ingredients = db.session.query(Drink.ingredients)
     measures = db.session.query(Drink.measures)
+    imageThumb = db.session.query(Drink.imageThumb)
+    user_id = db.session.query(Drink.user_id)
 
-    new_drink = Drink(drink=drink, ingredients=ingredients, measures=measures)
+    new_drink = Drink(drinkName=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures=measures, imageThumb=imageThumb, user_id=user_id)
     
     if form.validate_on_submit():
-        Drink.drink = form.drink.data
+        Drink.drinkName = form.drinkName.data
+        Drink.tags = form.tags.data
+        Drink.category = form.category.data
+        Drink.glass = form.glass.data
+        Drink.instructions = form.instructions.data
         Drink.ingredients = form.ingredients.data
-        Drink.measures = form.ingredients.data
-        db.session.add(new_drink)
+        Drink.measures = form.measures.data
+        Drink.imageThumb = form.imageThumb.data
+        Drink.user_id = form.user_id.data
+        db.session.add_all(new_drink)
         db.session.commit()
-        flash('Drink Added')
-        return redirect('/add_drink')
-
-    return render_template("show_drinks.html", form=form, drink=drink, ingredients=ingredients, measures = measures)
+        flash(f"{new_drink} Added")
+        return redirect('/drink')
+    else:
+        return render_template("add_drink.html", form=form, drinkName=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures = measures, imageThumb=imageThumb, user_id=user_id)
     
 ###############
 # USER REGISTER, LOGIN, LOGOUT

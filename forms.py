@@ -34,7 +34,7 @@ class UserAddForm(FlaskForm):
 
 class DrinkAddForm(FlaskForm):
     """Form for adding drinks."""
-    name = StringField("Name", validators=[DataRequired()])
+    drinkName = StringField("Name", validators=[DataRequired()])
     
     tags = StringField("Tags")
     

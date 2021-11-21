@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<form method="POST" action="/show_drinks">
+<form id="DrinkAddForm" method="POST" action="/drink">
   {{ form.hidden_tag() }}
 
   {% for field in form if field.widget.input_type != 'hidden'%}
@@ -17,10 +17,10 @@
   </div>
   {% endfor %}
   <button class="btn  btn-success  btn-lg">Submit</button>
-  <a href="/add_drink" class="btn btn-danger btn-lg">Go Back</a>
+  
 </form>
 
 
 
-
 {% endblock %}
+

@@ -87,7 +87,7 @@ class User(db.Model):
         return False
 
 
-# NEED TO COMPLETELY REDO THIS TO MATCH THE INFO/VARS IN API
+
 class Drink(db.Model):
     """Drinks Model"""
     __tablename__ = 'drinks'
@@ -99,7 +99,7 @@ class Drink(db.Model):
     user_id = db.Column(db.Integer, 
                         db.ForeignKey('users.id')) 
     
-    name = db.Column(db.String)
+    drinkName = db.Column(db.String)
     
     tags = db.Column(db.String)
     

@@ -12,13 +12,19 @@
       <h3 class="card-title"> {{ drink['name'] }} </h3>
       <p class="card-text">Instructions: {{ drink['instructions'] }} </p>
 
-      <form action="/drink" method="POST"></form>
+    
+      <form id="DrinkAddForm" method="POST" action="/add_drink">
+      
+        {% for field in form if field.widget.input_type != 'hidden'%}
+        <div class="form-group">
+          {{field.label}}
+          {{field}}
+        </div>
+        {% endfor %}
       <button>Add Drink</button>
+    </form>
 
 
-    {% for msg in get_flashed_messages() %}
-    <div class="alert alert-">{{ msg }}
-    {% endfor %} 
 
     </div>
     <div class="col-md-8">
@@ -31,7 +37,7 @@
 
 
           {% for ingredient in ingredients %}
-          {% if ingredients %}
+          {% if ingredients != 'null' %}
           <li class="list-group-item">Ingredients:
             {{ ingredient }} </li>
           {% endif %}
