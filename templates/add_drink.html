@@ -1,8 +1,61 @@
 {% extends 'base.html'  %}
 
 {% block content %}
+<div class="container">
+<form id="DrinkAddForm" method="POST" action="/add_drink">
+  <div class="mb-3">
+    <div class="col-lg-6" >
+      {{form.drinkName.label(class_="text-info")}}
+      {{form.drinkName(class_="form-control form-control-lg")}}
+    </div>
+  </div>
+  <div class="mb-3">
+    <div class="col-lg-6">
+      {{form.tags.label(class_="text-info")}}
+      {{form.tags(class_="form-control")}}
+    </div>
+  </div>
+  <div class="mb-3">
+    <div class="col-lg-6" >
+      {{form.category.label(class_="text-info")}}
+      {{form.category(class_="form-control form-control-lg")}}
+    </div>
+  </div>
+  <div class="mb-3">
+    <div class="col-lg-6" >
+      {{form.instructions.label(class_="text-info")}}
+      {{form.instructions(class_="form-control")}}
+    </div>
+  </div>
+  <div class="mb-3">
+    <div class="col-lg-6" >
+      <div class=>
+      {{form.ingredients.label(class_="text-info")}}
+      {{form.ingredients(class_="form-control form-control-lg")}}
+    </div>
+  </div>
+  <div class="mb-3">
+    <div class="col-lg-6" >
+      <div class=>
+      {{form.measures.label(class_="text-info")}}
+      {{form.measures(class_="form-control")}}
+    </div>
+  </div>
+  <div class="mb-3">
+    <div class="col-lg-6" >
+      {{form.imageThumb.label(class_="text-info")}}
+      {{form.imageThumb(class_="form-control form-control-lg")}}
+    </div>
+  </div>
 
-<form id="DrinkAddForm" method="POST" action="/drink">
+  <div class="container" style="margin-top: 2em">
+    <button class="btn btn-success btn-lg">Submit</button>
+  </div>
+</form>
+</div>
+
+
+    <!--   
   {{ form.hidden_tag() }}
 
   {% for field in form if field.widget.input_type != 'hidden'%}
@@ -15,12 +68,8 @@
     </small>
     {% endfor %}
   </div>
-  {% endfor %}
-  <button class="btn  btn-success  btn-lg">Submit</button>
-  
-</form>
+  {% endfor %} -->
 
 
 
 {% endblock %}
-

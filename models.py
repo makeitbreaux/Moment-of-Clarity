@@ -121,7 +121,7 @@ class Drink(db.Model):
         """Returns a dict representation of drink which we can turn into JSON"""
         return {
             'id': self.id,
-            'name': self.name,
+            'drinkName': self.drinkName,
             'category' : self.category,
             'glass' : self.glass,
             'instructions': self.instructions,
@@ -131,7 +131,7 @@ class Drink(db.Model):
         }
 
     def __repr__(self):
-        return f"<Drink {self.id}, name={self.name}, category={self.category}, glass={self.glass}, instructions={self.instructions}, ingredients={self.ingredients}, measures={self.measures}, imageThumb={self.imageThumb}>"
+        return f"<Drink {self.id}, drinkName={self.drinkName}, category={self.category}, glass={self.glass}, instructions={self.instructions}, ingredients={self.ingredients}, measures={self.measures}, imageThumb={self.imageThumb}>"
 
 # NOT EVEN SURE IF I STILL NEED THIS OR NOT    
     @classmethod

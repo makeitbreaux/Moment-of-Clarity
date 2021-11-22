@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, TextAreaField, TextField
 # from wtforms import validators
 # from wtforms.fields.core import SelectField
-from wtforms.fields.html5 import URLField, EmailField
+from wtforms.fields.html5 import IntegerField, URLField, EmailField
 from wtforms.validators import InputRequired, Length, DataRequired
 
 class UserAddForm(FlaskForm):
@@ -52,7 +52,7 @@ class DrinkAddForm(FlaskForm):
 
 class DrinkEditForm(FlaskForm):
     """Form for adding drinks."""
-    name = StringField("Name", validators=[DataRequired()])
+    drinkName = StringField("Name", validators=[DataRequired()])
     
     tags = StringField("Tags")
     

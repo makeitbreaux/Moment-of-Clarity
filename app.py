@@ -20,7 +20,7 @@ CURR_USER_KEY = "curr_user"
 API_BASE_URL = "http://www.thecocktaildb.com/api/json/v2/9973533"
 
 connect_db(app)
-db.drop_all()
+# db.drop_all()
 db.create_all()
 db.session.commit()
 
@@ -34,19 +34,16 @@ toolbar = DebugToolbarExtension(app)
     
     # return drink
 
-@app.route('/')
-def index_page():
-    drinks = Drink.query.all()
-    return render_template('index.html', drinks=drinks)
+
 
 # QUERIES API AND RETURNS SPECIFIED INFO
-@app.route('/drink', methods=["GET", "POST"])
-def get_drink():
+
+def request_drink(strDrink):
     """Return name, tags, and category for specified drink"""
     key = '9973533'
-    name = request.form["name"]
-    res = requests.get(f"{API_BASE_URL}/search.php?s={name}",
-                       params={'key': key, 'strDrink': name})
+    strDrink = request.form["strDrink"]
+    res = requests.get(f"{API_BASE_URL}/search.php?s={strDrink}",
+                       params={'key': key, 'strDrink': strDrink})
     data = res.json()
     
     id = data["drinks"][0]["idDrink"]
@@ -89,15 +86,20 @@ def get_drink():
     measure14 = data["drinks"][0]["strMeasure14"]
     measure15 = data["drinks"][0]["strMeasure15"]
     
-    measures = { measure1: measure1, measure2: measure2, measure3: measure3, measure4: measure4, measure5: measure5, measure6: measure6, measure7: measure7, measure8: measure8, measure9: measure9, measure10: measure10, measure11: measure11, measure12: measure12, measure13: measure13, measure14: measure14, measure15: measure15 }
+    return { 'id': id, 'name': drinkName, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions, measure1: measure1, measure2: measure2, measure3: measure3, measure4: measure4, measure5: measure5, measure6: measure6, measure7: measure7, measure8: measure8, measure9: measure9, measure10: measure10, measure11: measure11, measure12: measure12, measure13: measure13, measure14: measure14, measure15: measure15, ingredient1: ingredient1, ingredient2: ingredient2, ingredient3: ingredient3, ingredient4: ingredient4, ingredient5: ingredient5, ingredient6: ingredient6, ingredient7: ingredient7, ingredient8: ingredient8, ingredient9: ingredient9, ingredient10: ingredient10, ingredient11: ingredient11, ingredient12: ingredient12, ingredient13: ingredient13, ingredient14: ingredient14, ingredient15: ingredient15} 
     
-   
-    ingredients = { ingredient1: ingredient1, ingredient2: ingredient2, ingredient3: ingredient3, ingredient4: ingredient4, ingredient5: ingredient5, ingredient6: ingredient6, ingredient7: ingredient7, ingredient8: ingredient8, ingredient9: ingredient9, ingredient10: ingredient10, ingredient11: ingredient11, ingredient12: ingredient12, ingredient13: ingredient13, ingredient14: ingredient14, ingredient15: ingredient15 } 
+    # return render_template('show_drinks.html', drink=drink, ingredients=ingredients, measures=measures)
+@app.route('/')
+def index_page():
+    drinks = Drink.query.all()
+    return render_template('index.html', drinks=drinks)
 
-    drink = {'id': id, 'name': drinkName, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions}
- 
-    return render_template('show_drinks.html', drink=drink, ingredients=ingredients, measures=measures)
-
+@app.route('/drink', methods=["GET", "POST"])
+def get_drink():
+    strDrink = request.form.get('strDrink')
+    drink = request_drink(strDrink) 
+    
+    return render_template('show_drinks.html', drink=drink)
 # ****** THESE WERE CREATED WITH ADDING YOUR OWN DRINKS IN MIND, RETURN TO THIS LATER ******
 # @app.route('/api/drinks')
 # def list_all_drinks():
@@ -154,35 +156,34 @@ def get_drink():
 # # THIS CREATE_DRINK WAS CREATED TO ADD YOUR OWN DRINK TO DB, NEED TO ADJUST
 @app.route('/add_drink', methods=["GET", "POST"])
 def add_drink():
-    form = DrinkAddForm(obj=Drink)
-    drinkName = db.session.query(Drink.drinkName)
-    tags = db.session.query(Drink.tags)
-    category = db.session.query(Drink.category)
-    glass = db.session.query(Drink.glass)
-    instructions = db.session.query(Drink.instructions)
-    ingredients = db.session.query(Drink.ingredients)
-    measures = db.session.query(Drink.measures)
-    imageThumb = db.session.query(Drink.imageThumb)
-    user_id = db.session.query(Drink.user_id)
+    form = DrinkAddForm(request.form)
+    drinkName = request.form.get("drinkName")
+    tags = request.form.get("tags")
+    category = request.form.get("category")
+    glass = request.form.get("glass")
+    instructions = request.form.get("instructions")
+    ingredients = request.form.get("ingredients")
+    measures = request.form.get("measures")
+    imageThumb = request.form.get("imageThumb")
 
-    new_drink = Drink(drinkName=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures=measures, imageThumb=imageThumb, user_id=user_id)
+    new_drink = Drink(drinkName=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures=measures, imageThumb=imageThumb)
     
     if form.validate_on_submit():
-        Drink.drinkName = form.drinkName.data
-        Drink.tags = form.tags.data
-        Drink.category = form.category.data
-        Drink.glass = form.glass.data
-        Drink.instructions = form.instructions.data
-        Drink.ingredients = form.ingredients.data
-        Drink.measures = form.measures.data
-        Drink.imageThumb = form.imageThumb.data
-        Drink.user_id = form.user_id.data
-        db.session.add_all(new_drink)
+        drinkName = Drink(drinkName=form.drinkName.data)
+        tags = Drink(tags=form.tags.data)
+        category = Drink(category=form.category.data)
+        glass = Drink(glass=form.glass.data)
+        instructions = Drink(instructions=form.instructions.data)
+        ingredients = Drink(ingredients=form.ingredients.data)
+        measures = Drink(measures=form.measures.data)
+        imageThumb = Drink(imageThumb=form.imageThumb.data)
+        
+        db.session.add(new_drink)
         db.session.commit()
         flash(f"{new_drink} Added")
         return redirect('/drink')
     else:
-        return render_template("add_drink.html", form=form, drinkName=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures = measures, imageThumb=imageThumb, user_id=user_id)
+        return render_template("add_drink.html", form=form, drinkName=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures = measures, imageThumb=imageThumb)
     
 ###############
 # USER REGISTER, LOGIN, LOGOUT

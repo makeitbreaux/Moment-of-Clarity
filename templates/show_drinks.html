@@ -36,18 +36,18 @@
           <li class="list-group-item">Glass: {{drink['glass'] }} </li>
 
 
-          {% for ingredient in ingredients %}
-          {% if ingredients != 'null' %}
+           {% for ingredient in ingredients %}
+          {% if ingredients != 'null' %} 
           <li class="list-group-item">Ingredients:
-            {{ ingredient }} </li>
-          {% endif %}
+            {{ drink.ingredient }} </li>
+           {% endif %}
           {% endfor %}
 
-          {% for measure in measures %}
-          {% if measures %}
-          <li class="list-group-item">Measure: {{ measure }} </li>
-          {% endif %}
-          {% endfor %}
+           {% for measure in measures %}
+          {% if measures %} 
+          <li class="list-group-item">Measure: {{ drink.measure }} </li>
+           {% endif %}
+          {% endfor %} 
 
 
         </ul>
