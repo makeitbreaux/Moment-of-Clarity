@@ -10,7 +10,7 @@
     <div class="col-md-4" style="padding: 5%;">
       <img src=" {{ drink['image'] }} " style="width: 100%;" class="card-img-top" alt="...">
       <h3 class="card-title"> {{ drink['name'] }} </h3>
-      <p class="card-text">Instructions: {{ drink['instructions'] }} </p>
+      <!-- <p class="card-text">Instructions: {{ drink['instructions'] }} </p> -->
 
     
       <form id="DrinkAddForm" method="POST" action="/add_drink">
@@ -21,7 +21,9 @@
           {{field}}
         </div>
         {% endfor %}
-      <button>Add Drink</button>
+        <div class="d-grid gap-2 col-8 mx-auto">
+        <button type="button" class="btn btn-outline-secondary btn-lg">Add Drink</button>
+        </div>
     </form>
 
 
@@ -36,18 +38,15 @@
           <li class="list-group-item">Glass: {{drink['glass'] }} </li>
 
 
-           {% for ingredient in ingredients %}
-          {% if ingredients != 'null' %} 
-          <li class="list-group-item">Ingredients:
-            {{ drink.ingredient }} </li>
-           {% endif %}
-          {% endfor %}
+           {% if ingredients%}
+          <li class="list-group-item">Ingredients: {% for ingredient in ingredients %}
+            <ol>{{ ingredient }} </ol> 
+              {% endfor %}
+          </li>
+          {% endif %}
+          
+          <li class="list-group-item">Instructions: {{ drink['instructions'] }} </li>
 
-           {% for measure in measures %}
-          {% if measures %} 
-          <li class="list-group-item">Measure: {{ drink.measure }} </li>
-           {% endif %}
-          {% endfor %} 
 
 
         </ul>

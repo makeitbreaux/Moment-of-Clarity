@@ -1,3 +1,4 @@
+from logging import raiseExceptions
 from re import template
 from flask import Flask, render_template, redirect, session, flash, jsonify, g, request
 import requests
@@ -33,12 +34,65 @@ toolbar = DebugToolbarExtension(app)
     # drink = data["results"][0]
     
     # return drink
+# def get_random_drink():
+#     strDrinkThumb = request.get_data("strDrinkThumb")
+#     res = requests.get(f"{API_BASE_URL}/randomselection.php",
+#                        params={
+#                            'strDrinkThumb': strDrinkThumb,
+#                         })
+#     data = res.json()
+#     image = data["drinks"][0]["strDrinkThumb"]
+#     drinkName = data["drinks"][0]["strDrink"]
 
+#     randomDrink = {'image': image, 'drinkName': drinkName}
+    
+#     return randomDrink
+
+@app.route('/')
+def index_page():
+    strDrinkThumb = request.get_data("strDrinkThumb")
+    res = requests.get(f"{API_BASE_URL}/randomselection.php",
+                       params={
+                           'strDrinkThumb': strDrinkThumb,
+                        })
+    data = res.json()
+    image = data["drinks"][0]["strDrinkThumb"]
+    drinkName = data["drinks"][0]["strDrink"]
+
+    randomDrink = {'image': image, 'drinkName': drinkName}
+    return render_template('index.html', randomDrink=randomDrink)
+
+@app.route('/random_drink', methods=['GET', 'POST'])
+def display_random_drink():
+    strDrinkThumb = request.get_data("strDrinkThumb")
+    res = requests.get(f"{API_BASE_URL}/randomselection.php",
+                       params={
+                           'strDrinkThumb': strDrinkThumb,
+                        })
+    data = res.json()
+    id = data["drinks"][0]["idDrink"]
+    drinkName = data["drinks"][0]["strDrink"]
+    tags = data["drinks"][0]["strTags"]
+    category = data["drinks"][0]["strCategory"]
+    image = data["drinks"][0]["strDrinkThumb"]
+    glass = data["drinks"][0]["strGlass"]
+    instructions = data["drinks"][0]["strInstructions"]
+
+    ingredients = []
+    numIngredients = 15
+    for i in range(1, numIngredients):
+        ingredient = data["drinks"][0]["strIngredient" + str(i)]
+        measure = data["drinks"][0]["strMeasure" + str(i)]
+        if (ingredient is not None):
+            ingredients.append(measure + " " + ingredient)
+
+    randomDrink = { 'id': id, 'name': drinkName, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions, 'ingredients':ingredients}
+    return render_template('show_drinks.html', drink=randomDrink, ingredients=ingredients)
 
 
 # QUERIES API AND RETURNS SPECIFIED INFO
-
-def request_drink(strDrink):
+@app.route('/drink', methods=["GET", "POST"])
+def get_drink():
     """Return name, tags, and category for specified drink"""
     key = '9973533'
     strDrink = request.form["strDrink"]
@@ -54,76 +108,37 @@ def request_drink(strDrink):
     glass = data["drinks"][0]["strGlass"]
     instructions = data["drinks"][0]["strInstructions"]
 
-    ingredient1 = data["drinks"][0]["strIngredient1"]
-    ingredient2 = data["drinks"][0]["strIngredient2"]
-    ingredient3 = data["drinks"][0]["strIngredient3"]
-    ingredient4 = data["drinks"][0]["strIngredient4"]
-    ingredient5 = data["drinks"][0]["strIngredient5"]
-    ingredient6 = data["drinks"][0]["strIngredient6"]
-    ingredient7 = data["drinks"][0]["strIngredient7"]
-    ingredient8 = data["drinks"][0]["strIngredient8"]
-    ingredient9 = data["drinks"][0]["strIngredient9"]
-    ingredient10 = data["drinks"][0]["strIngredient10"]
-    ingredient11 = data["drinks"][0]["strIngredient11"]
-    ingredient12 = data["drinks"][0]["strIngredient12"]
-    ingredient13 = data["drinks"][0]["strIngredient13"]
-    ingredient14 = data["drinks"][0]["strIngredient14"]
-    ingredient15 = data["drinks"][0]["strIngredient15"]
-   
-    measure1 = data["drinks"][0]["strMeasure1"]
-    measure2 = data["drinks"][0]["strMeasure2"]
-    measure3 = data["drinks"][0]["strMeasure3"]
-    measure4 = data["drinks"][0]["strMeasure4"]
-    measure5 = data["drinks"][0]["strMeasure5"]
-    measure6 = data["drinks"][0]["strMeasure6"]
-    measure7 = data["drinks"][0]["strMeasure7"]
-    measure8 = data["drinks"][0]["strMeasure8"]
-    measure9 = data["drinks"][0]["strMeasure9"]
-    measure10 = data["drinks"][0]["strMeasure10"]
-    measure11 = data["drinks"][0]["strMeasure11"]
-    measure12 = data["drinks"][0]["strMeasure12"]
-    measure13 = data["drinks"][0]["strMeasure13"]
-    measure14 = data["drinks"][0]["strMeasure14"]
-    measure15 = data["drinks"][0]["strMeasure15"]
+    ingredients = []
+    numIngredients = 15
+    for i in range(1, numIngredients):
+        ingredient = data["drinks"][0]["strIngredient" + str(i)]
+        measure = data["drinks"][0]["strMeasure" + str(i)]
+        if (ingredient is not None):
+            ingredients.append(measure + " " + ingredient)
     
-    return { 'id': id, 'name': drinkName, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions, measure1: measure1, measure2: measure2, measure3: measure3, measure4: measure4, measure5: measure5, measure6: measure6, measure7: measure7, measure8: measure8, measure9: measure9, measure10: measure10, measure11: measure11, measure12: measure12, measure13: measure13, measure14: measure14, measure15: measure15, ingredient1: ingredient1, ingredient2: ingredient2, ingredient3: ingredient3, ingredient4: ingredient4, ingredient5: ingredient5, ingredient6: ingredient6, ingredient7: ingredient7, ingredient8: ingredient8, ingredient9: ingredient9, ingredient10: ingredient10, ingredient11: ingredient11, ingredient12: ingredient12, ingredient13: ingredient13, ingredient14: ingredient14, ingredient15: ingredient15} 
+    drink = { 'id': id, 'name': drinkName, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions, 'ingredients':ingredients} 
     
-    # return render_template('show_drinks.html', drink=drink, ingredients=ingredients, measures=measures)
-@app.route('/')
-def index_page():
-    drinks = Drink.query.all()
-    return render_template('index.html', drinks=drinks)
+    return render_template('show_drinks.html', drink=drink, ingredients=ingredients)
 
-@app.route('/drink', methods=["GET", "POST"])
-def get_drink():
-    strDrink = request.form.get('strDrink')
-    drink = request_drink(strDrink) 
-    
-    return render_template('show_drinks.html', drink=drink)
+
 # ****** THESE WERE CREATED WITH ADDING YOUR OWN DRINKS IN MIND, RETURN TO THIS LATER ******
-# @app.route('/api/drinks')
-# def list_all_drinks():
-#     """Return JSON w/ all drinks"""
 
-#     all_drinks = [drink.serialize() for drink in Drink.query.all()]
-#     return jsonify(drinks=all_drinks)
-
-# @app.route('/api/drinks/<int:id>')
-# def get_drink(id):
-#     """Returns JSON for one drink in particular"""
-#     drink = Drink.query.get_or_404(id)
-#     return jsonify(drink=drink.serialize())
 
 # #THIS CREATE_DRINK ONLY RETURNS JSON
-# @app.route('/drink', methods=["GET", "POST"])
+# @app.route('/add_drink', methods=["GET", "POST"])
 # def create_drink():
 #     """Creates a new drink from form data and returns JSON of that created drink"""
     
-#     name = request.json["name"]
+#     drinkName = request.json["drinkName"]
+#     tags = request.json["tags"]
+#     category = request.json["category"]
+#     glass = request.json["glass"]
+#     instructions = request.json["instructions"]
 #     ingredients = request.json["ingredients"]
-#     image_url = request.json["image_url"]
+#     measures = request.json["measures"]
+#     imageThumb = request.json["imageThumb"]
     
-#     new_drink = Drink(name=name, ingredients=ingredients, image_url=image_url)
+#     new_drink = Drink(drinkName=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures=measures, imageThumb=imageThumb)
     
 #     db.session.add(new_drink)
 #     db.session.commit()
@@ -131,7 +146,7 @@ def get_drink():
 #     response_json = jsonify(drink=new_drink.serialize())
 #     return (response_json, 201)
 
-#     # return render_template("add_drink.html")
+    # return render_template("add_drink.html")
 
 # @app.route('/api/drinks/<int:id>', methods=["PATCH"])
 # def update_drink(id):
@@ -168,7 +183,7 @@ def add_drink():
 
     new_drink = Drink(drinkName=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures=measures, imageThumb=imageThumb)
     
-    if form.validate_on_submit():
+    if request.method == 'POST':
         drinkName = Drink(drinkName=form.drinkName.data)
         tags = Drink(tags=form.tags.data)
         category = Drink(category=form.category.data)
@@ -177,11 +192,20 @@ def add_drink():
         ingredients = Drink(ingredients=form.ingredients.data)
         measures = Drink(measures=form.measures.data)
         imageThumb = Drink(imageThumb=form.imageThumb.data)
+        # drinkName = request.form.data
+        # tags = request.form.data
+        # category = request.form.data
+        # glass = request.form.data
+        # instructions = request.form.data
+        # ingredients = request.form.data
+        # measures = request.form.data
+        # imageThumb = request.form.data
+        
         
         db.session.add(new_drink)
         db.session.commit()
         flash(f"{new_drink} Added")
-        return redirect('/drink')
+        return redirect('/')
     else:
         return render_template("add_drink.html", form=form, drinkName=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures = measures, imageThumb=imageThumb)
     

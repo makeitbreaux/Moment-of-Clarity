@@ -2,7 +2,15 @@
 
 {% block content %}
 <div class="container">
-<form id="DrinkAddForm" method="POST" action="/add_drink">
+
+  {% for message in get_flashed_messages() %}
+  <div class="alert alert-info">
+     {{ message }}
+
+   </div>
+ {% endfor %}
+
+  <form id="DrinkAddForm" method="POST" action="/add_drink">
   <div class="mb-3">
     <div class="col-lg-6" >
       {{form.drinkName.label(class_="text-info")}}
@@ -49,7 +57,7 @@
   </div>
 
   <div class="container" style="margin-top: 2em">
-    <button class="btn btn-success btn-lg">Submit</button>
+    <button type="submit" form="DrinkAddForm" class="btn btn-success btn-lg">Submit</button>
   </div>
 </form>
 </div>
