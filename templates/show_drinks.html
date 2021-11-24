@@ -47,6 +47,7 @@
           
           <li class="list-group-item">Instructions: {{ drink['instructions'] }} </li>
 
+          <button type="submit" class="add-drink" value='{{ drink | tojson | safe }}'>Add Drink</button> 
 
 
         </ul>

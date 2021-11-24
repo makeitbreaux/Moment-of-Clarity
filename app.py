@@ -125,28 +125,28 @@ def get_drink():
 
 
 # #THIS CREATE_DRINK ONLY RETURNS JSON
-# @app.route('/add_drink', methods=["GET", "POST"])
-# def create_drink():
-#     """Creates a new drink from form data and returns JSON of that created drink"""
+@app.route('/add_drink', methods=["POST"])
+def create_drink():
+    """Creates a new drink from form data and returns JSON of that created drink"""
     
-#     drinkName = request.json["drinkName"]
-#     tags = request.json["tags"]
-#     category = request.json["category"]
-#     glass = request.json["glass"]
-#     instructions = request.json["instructions"]
-#     ingredients = request.json["ingredients"]
-#     measures = request.json["measures"]
-#     imageThumb = request.json["imageThumb"]
-    
-#     new_drink = Drink(drinkName=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures=measures, imageThumb=imageThumb)
-    
-#     db.session.add(new_drink)
-#     db.session.commit()
+    name = request.json["name"]
+    image = request.json["image"]
 
-#     response_json = jsonify(drink=new_drink.serialize())
-#     return (response_json, 201)
+    # TODO: add any other drink info you wish to store in DB. use above example as reference
+    # TODO: check to see if drink exists by searching by drink `name`
+    # TODO: if drink does not exist, then add it to drink table
+    # TODO: if drink exists, then get drink id
+    # TODO: with drink id, tie it to user id
+    # new_drink = Drink(name=name, ingredients=ingredients, image_url=image)
+    
+    # db.session.add(new_drink)
+    # db.session.commit()
 
-    # return render_template("add_drink.html")
+    # TODO: create page to show all of the user saved drinks
+    # TODO: redirect to page with all of user saved drinks 
+    # TODO: handle error
+    response_json = jsonify(success=True)
+    return (response_json, 201)
 
 # @app.route('/api/drinks/<int:id>', methods=["PATCH"])
 # def update_drink(id):

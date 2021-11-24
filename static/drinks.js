@@ -6,3 +6,7 @@ async function deleteDrink() {
   $(this).parent().remove()
 }
 
+$('.add-drink').on('click', addDrink)
+async function addDrink(e) {  
+  await axios.post(`/add_drink`, JSON.parse(e.target.value));
+}
