@@ -56,11 +56,13 @@ def index_page():
                            'strDrinkThumb': strDrinkThumb,
                         })
     data = res.json()
-    image = data["drinks"][0]["strDrinkThumb"]
-    drinkName = data["drinks"][0]["strDrink"]
-
-    randomDrink = {'image': image, 'drinkName': drinkName}
-    return render_template('index.html', randomDrink=randomDrink)
+    def transformDrinks(drink):
+        image = drink["strDrinkThumb"]
+        drinkName = drink["strDrink"]
+        randomDrink = {'image': image, 'drinkName': drinkName}
+        return randomDrink
+    randomDrinks = list(map(transformDrinks, data["drinks"]))
+    return render_template('index.html', randomDrinks=randomDrinks)
 
 @app.route('/random_drink', methods=['GET', 'POST'])
 def display_random_drink():
