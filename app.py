@@ -204,8 +204,8 @@ def add_drink():
         
         db.session.add(new_drink)
         db.session.commit()
-        flash(f"{new_drink} Added")
-        return redirect('/')
+        flash(f"{new_drink.drinkName} Added to Recipes")
+        return redirect('/add_drink')
     else:
         return render_template("add_drink.html", form=form, drinkName=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures = measures, imageThumb=imageThumb)
     
