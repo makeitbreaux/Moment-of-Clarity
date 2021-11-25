@@ -45,7 +45,11 @@ def index_page():
         drinkName = drink["strDrink"]
         randomDrink = {'image': image, 'drinkName': drinkName}
         return randomDrink
+<<<<<<< HEAD
     randomDrinks = list(map(transformDrinks, data["drinks"])), 
+=======
+    randomDrinks = list(map(transformDrinks, data["drinks"]))
+>>>>>>> 7983826d00cebc9a1f00d7e7700d543c3a89b8b2
     return render_template('index.html', randomDrinks=randomDrinks)
 
 @app.route('/random_drink', methods=['GET', 'POST'])
