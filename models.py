@@ -133,11 +133,3 @@ class Drink(db.Model):
     def __repr__(self):
         return f"<Drink {self.id}, drinkName={self.drinkName}, category={self.category}, glass={self.glass}, instructions={self.instructions}, ingredients={self.ingredients}, measures={self.measures}, imageThumb={self.imageThumb}>"
 
-# NOT EVEN SURE IF I STILL NEED THIS OR NOT    
-    @classmethod
-    def get_text(text):
-        """Get text from Drink field"""
-        
-        text = Drink.get_text(text=text)
-        
-        return text(text=text)

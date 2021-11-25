@@ -30,8 +30,11 @@
           <li class="nav-item">
             <a class="nav-link pr-3 text-light" href="/register">Sign up</a>
           </li>
-
-
+          {% else %}
+          <li>
+            <a href="/users/{{ g.user.id }}">
+            </a>
+          </li>
           <li class="nav-item">
         <a class="nav-link pr-3 text-light" href="/logout">Logout</a>
       </li>
@@ -39,11 +42,13 @@
       </ul>
     </div>
   </nav>
-  <!-- FOR FLASHED MESSAGES, ADD THOSE IN -->
-  <!-- <div class="container" style="margin-top: 2em">
-    {% for category, msg in get_flashed_messages(with_categories=True) %}
-    <div class="alert alert-{{category}}">{{ msg }}</div>
-    {% endfor %} -->
+
+  {% for message in get_flashed_messages() %}
+    <div class="alert alert-info">
+      {{ message }}
+    </div>
+ {% endfor %}
+
   {% block content %}
 
   {% endblock %}
