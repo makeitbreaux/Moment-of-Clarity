@@ -20,7 +20,6 @@
     </div>
   </div>
 </div>
-<<<<<<< HEAD
 
 {% for message in get_flashed_messages() %}
 <div class="alert alert-info">
@@ -39,20 +38,10 @@
       <img src="{{ randomDrinks.image }}" class="mx-auto d-block w-25" alt="...">
       <div class="carousel-caption">
         <h5> <a href="/random_drink"> {{ randomDrinks.drinkName }}  </a> </h5>
-=======
-{% if randomDrinks %}
-<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img src="{{ randomDrinks[0].image }}" class="mx-auto d-block w-25">
-      <div class="carousel-caption">
-        <h5><a href="/drink/{{randomDrinks[0].drinkName}}">{{ randomDrinks[0].drinkName }}</a></h5>
->>>>>>> 7983826d00cebc9a1f00d7e7700d543c3a89b8b2
       </div>
     </div>
     {% for drink in randomDrinks[1:] %}
     <div class="carousel-item">
-<<<<<<< HEAD
       <img src=" {{ randomDrinks.image }} " class="mx-auto d-block w-25" alt="...">
       <div class="carousel-caption">
         <h5> <a href="/random_drink">  {{ randomDrinks.drinkName }} </a> </h5>
@@ -62,11 +51,6 @@
       <img src="{{ randomDrinks.image }}" class="d-block w-25" alt="...">
       <div class="carousel-caption d-md-block">
         <h5> <a href="/random_drink"></a> {{ randomDrinks.drinkName }} </a> </h5>
-=======
-      <img src="{{ drink.image }}" class="mx-auto d-block w-25">
-      <div class="carousel-caption">
-        <h5><a href="/drink/{{drink.drinkName}}">{{ drink.drinkName }}</a></h5>
->>>>>>> 7983826d00cebc9a1f00d7e7700d543c3a89b8b2
       </div>
     </div>
     {% endfor %}
