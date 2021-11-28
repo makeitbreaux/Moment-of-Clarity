@@ -19,17 +19,17 @@ class UserAddForm(FlaskForm):
     
 # ****** MAY NEED THIS FORM LATER *******
  
-# class UserEditForm(FlaskForm):
-#     """Form for editing users."""
-#     username = StringField("Username", validators=[InputRequired(), Length(min=1, max=30, message="Does Not Meet Length Requirements")])
+class UserEditForm(FlaskForm):
+    """Form for editing users."""
+    username = StringField("Username", validators=[InputRequired(), Length(min=1, max=30, message="Does Not Meet Length Requirements")])
 
-#     first_name = StringField("First Name", validators=[InputRequired(), Length(min=1, max=20, message="Does Not Meet Length Requirements")])
+    first_name = StringField("First Name", validators=[InputRequired(), Length(min=1, max=20, message="Does Not Meet Length Requirements")])
     
-#     last_name = StringField("Last Name", validators=[InputRequired(), Length(min=1, max=20, message="Does Not Meet Length Requirements")])
+    last_name = StringField("Last Name", validators=[InputRequired(), Length(min=1, max=20, message="Does Not Meet Length Requirements")])
     
-#     password = PasswordField("Password", validators=[InputRequired(), Length(min=1, max=30, message="Does Not Meet Length Requirements")])
+    password = PasswordField("Password", validators=[InputRequired(), Length(min=1, max=30, message="Does Not Meet Length Requirements")])
     
-#     email = StringField("Email", validators=[DataRequired(), Email()])
+    email = StringField("Email", validators=[DataRequired()])
 
 
 class DrinkAddForm(FlaskForm):
