@@ -1,4 +1,4 @@
-{
+nonAlcoholicIngredients = {
     "nonAlcoholicIngredients": [
         {
             "ingredient": "Agave Syrup"

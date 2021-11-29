@@ -6,6 +6,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from models import Drink, connect_db, db, User, Drink
 from forms import UserAddForm, DrinkAddForm, DrinkEditForm, LoginForm, UserEditForm
 from sqlalchemy.exc import IntegrityError
+from alcoholic import alcoholicIngredients
 # from secrets import API_SECRET_KEY
 
 app = Flask(__name__)
@@ -72,7 +73,7 @@ def display_random_drink():
         ingredient = data["drinks"][0]["strIngredient" + str(i)]
         measure = data["drinks"][0]["strMeasure" + str(i)]
         if (ingredient is not None):
-            ingredients.append(measure + " " + ingredient)
+            ingredients.append(measure + "" + ingredient)
 
     randomDrink = { 'id': id, 'name': drinkName, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions, 'ingredients':ingredients}
     return render_template('show_drinks.html', drink=randomDrink, ingredients=ingredients)
@@ -103,9 +104,15 @@ def get_drink():
         measure = data["drinks"][0]["strMeasure" + str(i)]
         if (ingredient is not None):
             ingredients.append(measure + " " + ingredient)
-    
-    drink = { 'id': id, 'name': drinkName, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions, 'ingredients':ingredients} 
-    
+     
+        drink = { 'id': id, 'name': drinkName, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions, 'ingredients':ingredients} 
+        
+    def filter_alcohol(drink):
+        ai_len = len(alcoholicIngredients)
+        for i in range(0, ai_len):
+            if i in alcoholicIngredients:
+                return None
+           
     return render_template('show_drinks.html', drink=drink, ingredients=ingredients)
 
 
