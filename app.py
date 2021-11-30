@@ -136,29 +136,6 @@ def get_drink():
     return render_template('show_drinks.html', drink=drink, ingredients=ingredients)
 
 
-# CHANGE THIS TO HANDLE SHOW_DRINK BUTTON
-# @app.route('/add_drink', methods=["GET", "POST"])
-# def create_drink():
-#     """Creates a new drink from form data and returns JSON of that created drink"""
-    
-#     drinkName = request.json["drinkName"]
-#     tags = request.json["tags"]
-#     category = request.json["category"]
-#     glass = request.json["glass"]
-#     instructions = request.json["instructions"]
-#     ingredients = request.json["ingredients"]
-#     measures = request.json["measures"]
-#     imageThumb = request.json["imageThumb"]
-    
-#     new_drink = Drink(drinkName=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures=measures, imageThumb=imageThumb)
-    
-#     db.session.add(new_drink)
-#     db.session.commit()
-
-#     response_json = jsonify(drink=new_drink.serialize())
-#     return (response_json, 201)
-
-
 @app.route('/add_drink', methods=["GET", "POST"])
 def add_drink():
     """Using form found in navbar, user adds a drink to DB."""
