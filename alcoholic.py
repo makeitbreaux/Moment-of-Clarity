@@ -1,5 +1,4 @@
-alcoholicIngredients = {
-    "alcoholicIngredients": [
+alcoholicIngredients = [
         {
             "ingredient" : "Vodka"
         },
@@ -655,5 +654,5 @@ alcoholicIngredients = {
             "ingredient": "Ruby Port"
         }
     ]
-}
+
 

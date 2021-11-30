@@ -34,6 +34,8 @@ toolbar = DebugToolbarExtension(app)
 @app.route('/')
 def index_page():
     """Displays random drinks in carousel on home page."""
+    def determineAlcohol(ingredient):
+        return any(alcoholicIngredient.ingredient == ingredient for alcoholicIngredient in alcoholicIngredients)
     
     strDrinkThumb = request.get_data("strDrinkThumb")
     res = requests.get(f"{API_BASE_URL}/randomselection.php",
@@ -42,9 +44,24 @@ def index_page():
                         })
     data = res.json()
     def transformDrinks(drink):
-        image = drink["strDrinkThumb"]
         drinkName = drink["strDrink"]
-        randomDrink = {'image': image, 'drinkName': drinkName}
+        tags = drink["strTags"]
+        category = drink["strCategory"]
+        image = drink["strDrinkThumb"]
+        glass = drink["strGlass"]
+        instructions = drink["strInstructions"]
+
+        ingredients = []
+        numIngredients = 15
+        for i in range(1, numIngredients):
+            ingredient = data["drinks"][0]["strIngredient" + str(i)]
+            measure = data["drinks"][0]["strMeasure" + str(i)]
+            if (ingredient is not None):
+                isAlcoholic = determineAlcohol(ingredient)
+                if (not isAlcoholic) :
+                    ingredients.append(measure + " " + ingredient)
+        
+        randomDrink = {'name': drinkName, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions, 'ingredients':ingredients}
         return randomDrink
     randomDrinks = list(map(transformDrinks, data["drinks"])), 
     return render_template('index.html', randomDrinks=randomDrinks)
@@ -73,7 +90,9 @@ def display_random_drink():
         ingredient = data["drinks"][0]["strIngredient" + str(i)]
         measure = data["drinks"][0]["strMeasure" + str(i)]
         if (ingredient is not None):
-            ingredients.append(measure + "" + ingredient)
+            isAlcoholic = determineAlcohol(ingredient)
+            if (not isAlcoholic) :
+                ingredients.append(measure + " " + ingredient)
 
     randomDrink = { 'id': id, 'name': drinkName, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions, 'ingredients':ingredients}
     return render_template('show_drinks.html', drink=randomDrink, ingredients=ingredients)
@@ -81,6 +100,9 @@ def display_random_drink():
 
 # QUERIES API AND RETURNS SPECIFIED INFO
 @app.route('/drink', methods=["GET", "POST"])
+def determineAlcohol(ingredient):
+        return any(alcoholicIngredient.ingredient == ingredient for alcoholicIngredient in alcoholicIngredients)
+
 def get_drink():
     """Return all information for specified drink."""
     key = '9973533'
@@ -103,16 +125,14 @@ def get_drink():
         ingredient = data["drinks"][0]["strIngredient" + str(i)]
         measure = data["drinks"][0]["strMeasure" + str(i)]
         if (ingredient is not None):
-            ingredients.append(measure + " " + ingredient)
-     
-        drink = { 'id': id, 'name': drinkName, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions, 'ingredients':ingredients} 
+            isAlcoholic = determineAlcohol(ingredient)
+            if (not isAlcoholic) :
+                ingredients.append(measure + " " + ingredient)
+            
         
-    def filter_alcohol(drink):
-        ai_len = len(alcoholicIngredients)
-        for i in range(0, ai_len):
-            if i in alcoholicIngredients:
-                return None
-           
+        drink = { 'id': id, 'name': drinkName, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions, 'ingredients':ingredients} 
+          
+
     return render_template('show_drinks.html', drink=drink, ingredients=ingredients)
 
 

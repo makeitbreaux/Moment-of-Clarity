@@ -35,22 +35,22 @@
   </div>
   <div class="carousel-inner">
     <div class="carousel-item active ">
-      <img src="{{ randomDrinks.image }}" class="mx-auto d-block w-25" alt="...">
+      <img src="{{ randomDrinks['image'] }}" class="mx-auto d-block w-25" alt="...">
       <div class="carousel-caption">
-        <h5> <a href="/random_drink"> {{ randomDrinks.drinkName }}  </a> </h5>
+        <h5> <a href="/drink/{{strDrink}}"> {{ randomDrinks['drinkName'] }}  </a> </h5>
       </div>
     </div>
     {% for drink in randomDrinks[1:] %}
     <div class="carousel-item">
       <img src=" {{ randomDrinks.image }} " class="mx-auto d-block w-25" alt="...">
       <div class="carousel-caption">
-        <h5> <a href="/random_drink">  {{ randomDrinks.drinkName }} </a> </h5>
+        <h5> <a href="/drink/{{strDrink}}">  {{ randomDrinks.drinkName }} </a> </h5>
       </div>
     </div>
     <div class="carousel-item">
       <img src="{{ randomDrinks.image }}" class="d-block w-25" alt="...">
       <div class="carousel-caption d-md-block">
-        <h5> <a href="/random_drink"></a> {{ randomDrinks.drinkName }} </a> </h5>
+        <h5> <a href="/drink/{{strDrink}}"></a> {{ randomDrinks.drinkName }} </a> </h5>
       </div>
     </div>
     {% endfor %}
