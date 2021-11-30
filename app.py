@@ -46,7 +46,8 @@ def index_page():
         drinkName = drink["strDrink"]
         randomDrink = {'image': image, 'drinkName': drinkName}
         return randomDrink
-    randomDrinks = list(map(transformDrinks, data["drinks"])), 
+    randomDrinks = list(map(transformDrinks, data["drinks"]))
+    print(randomDrinks)
     return render_template('index.html', randomDrinks=randomDrinks)
 
 @app.route('/random_drink', methods=['GET', 'POST'])
@@ -79,16 +80,20 @@ def display_random_drink():
     return render_template('show_drinks.html', drink=randomDrink, ingredients=ingredients)
 
 
+@app.route('/drink', methods=["POST"])
+def get_drink_form():
+    drinkName = request.form['strDrink']
+    return redirect(f"/drink/{drinkName}")
+
 # QUERIES API AND RETURNS SPECIFIED INFO
-@app.route('/drink', methods=["GET", "POST"])
-def get_drink():
+@app.route('/drink/<string:drinkName>', methods=["GET"])
+def get_drink(drinkName):
     """Return all information for specified drink."""
     key = '9973533'
-    strDrink = request.form["strDrink"]
-    res = requests.get(f"{API_BASE_URL}/search.php?s={strDrink}",
-                       params={'key': key, 'strDrink': strDrink})
+    res = requests.get(f"{API_BASE_URL}/search.php?s={drinkName}",
+                       params={'key': key, 'strDrink': drinkName})
     data = res.json()
-    
+
     id = data["drinks"][0]["idDrink"]
     drinkName = data["drinks"][0]["strDrink"]
     tags = data["drinks"][0]["strTags"]
@@ -99,19 +104,18 @@ def get_drink():
 
     ingredients = []
     numIngredients = 15
+
+    def determine_alcoholic(ingredient):
+        return any(alcoholicIngredient['ingredient'] == ingredient for alcoholicIngredient in alcoholicIngredients)
+
     for i in range(1, numIngredients):
         ingredient = data["drinks"][0]["strIngredient" + str(i)]
         measure = data["drinks"][0]["strMeasure" + str(i)]
         if (ingredient is not None):
-            ingredients.append(measure + " " + ingredient)
-     
+            isAlcoholic = determine_alcoholic(ingredient)
+            if (not isAlcoholic):
+                ingredients.append(f"{measure or ''} {ingredient}")
         drink = { 'id': id, 'name': drinkName, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions, 'ingredients':ingredients} 
-        
-    def filter_alcohol(drink):
-        ai_len = len(alcoholicIngredients)
-        for i in range(0, ai_len):
-            if i in alcoholicIngredients:
-                return None
            
     return render_template('show_drinks.html', drink=drink, ingredients=ingredients)
 

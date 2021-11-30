@@ -22,22 +22,20 @@
           <a class="nav-link pr-3 text-light" href="/">Recipes</a>
         </li>
         {% if not g.user %}
-    
-          
           <li class="nav-item">
             <a class="nav-link pr-3 text-light" href="/login">Login</a>
           </li>
           <li class="nav-item">
             <a class="nav-link pr-3 text-light" href="/register">Sign up</a>
           </li>
-          {% else %}
+        {% else %}
           <li>
             <a href="/users/{{ g.user.id }}">
             </a>
           </li>
           <li class="nav-item">
-        <a class="nav-link pr-3 text-light" href="/logout">Logout</a>
-      </li>
+            <a class="nav-link pr-3 text-light" href="/logout">Logout</a>
+          </li>
         {% endif %}
       </ul>
     </div>
