@@ -6,6 +6,9 @@ alcoholicIngredients = [
             "ingredient" : "Gin"
         },
         {
+            "ingredient" : "Galliano"
+        },
+        {
             "ingredient" : "Rum"
         },
         {
@@ -16,6 +19,9 @@ alcoholicIngredients = [
         },
         {
             "ingredient" : "Absolut Kurant"
+        },
+        {
+            "ingredient" : "Absolut Citron"
         },
         {
             "ingredient" : "Absolut Peppar"

@@ -18,24 +18,19 @@ app.config["SECRET_KEY"] = "abc123"
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 CURR_USER_KEY = "curr_user"
-
 API_BASE_URL = "http://www.thecocktaildb.com/api/json/v2/9973533"
+toolbar = DebugToolbarExtension(app)
+database = "postgresql:///drinks"
 
 connect_db(app)
-# db.drop_all()
 db.create_all()
 db.session.commit()
 
-toolbar = DebugToolbarExtension(app)
-
-# BASE URL FOR SEARCH  http://www.thecocktaildb.com/api/json/v2/9973533/search.php?s=
-
-
+################################################################
+# DISPLAY PAGES, MAKE PAGES FUNCTION
 @app.route('/')
 def index_page():
     """Displays random drinks in carousel on home page."""
-    def determineAlcohol(ingredient):
-        return any(alcoholicIngredient.ingredient == ingredient for alcoholicIngredient in alcoholicIngredients)
     
     strDrinkThumb = request.get_data("strDrinkThumb")
     res = requests.get(f"{API_BASE_URL}/randomselection.php",
@@ -44,73 +39,27 @@ def index_page():
                         })
     data = res.json()
     def transformDrinks(drink):
-        drinkName = drink["strDrink"]
-        tags = drink["strTags"]
-        category = drink["strCategory"]
         image = drink["strDrinkThumb"]
-        glass = drink["strGlass"]
-        instructions = drink["strInstructions"]
-
-        ingredients = []
-        numIngredients = 15
-        for i in range(1, numIngredients):
-            ingredient = data["drinks"][0]["strIngredient" + str(i)]
-            measure = data["drinks"][0]["strMeasure" + str(i)]
-            if (ingredient is not None):
-                isAlcoholic = determineAlcohol(ingredient)
-                if (not isAlcoholic) :
-                    ingredients.append(measure + " " + ingredient)
-        
-        randomDrink = {'name': drinkName, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions, 'ingredients':ingredients}
+        drinkName = drink["strDrink"]
+        randomDrink = {'image': image, 'drinkName': drinkName}
         return randomDrink
-    randomDrinks = list(map(transformDrinks, data["drinks"])), 
+    randomDrinks = list(map(transformDrinks, data["drinks"]))
+    print(randomDrinks)
     return render_template('index.html', randomDrinks=randomDrinks)
 
-@app.route('/random_drink', methods=['GET', 'POST'])
-def display_random_drink():
-    """Returns random drinks."""
-    
-    strDrinkThumb = request.get_data("strDrinkThumb")
-    res = requests.get(f"{API_BASE_URL}/randomselection.php",
-                       params={
-                           'strDrinkThumb': strDrinkThumb,
-                        })
-    data = res.json()
-    id = data["drinks"][0]["idDrink"]
-    drinkName = data["drinks"][0]["strDrink"]
-    tags = data["drinks"][0]["strTags"]
-    category = data["drinks"][0]["strCategory"]
-    image = data["drinks"][0]["strDrinkThumb"]
-    glass = data["drinks"][0]["strGlass"]
-    instructions = data["drinks"][0]["strInstructions"]
+@app.route('/drink', methods=["POST"])
+def get_drink_form():
+    drinkName = request.form['strDrink']
+    return redirect(f"/drink/{drinkName}")
 
-    ingredients = []
-    numIngredients = 15
-    for i in range(1, numIngredients):
-        ingredient = data["drinks"][0]["strIngredient" + str(i)]
-        measure = data["drinks"][0]["strMeasure" + str(i)]
-        if (ingredient is not None):
-            isAlcoholic = determineAlcohol(ingredient)
-            if (not isAlcoholic) :
-                ingredients.append(measure + " " + ingredient)
-
-    randomDrink = { 'id': id, 'name': drinkName, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions, 'ingredients':ingredients}
-    return render_template('show_drinks.html', drink=randomDrink, ingredients=ingredients)
-
-
-# QUERIES API AND RETURNS SPECIFIED INFO
-@app.route('/drink', methods=["GET", "POST"])
-def determineAlcohol(ingredient):
-        return any(alcoholicIngredient.ingredient == ingredient for alcoholicIngredient in alcoholicIngredients)
-
-def get_drink():
-    """Return all information for specified drink."""
+@app.route('/drink/<string:drinkName>', methods=["GET"])
+def get_drink(drinkName):
+    """Returns all information for specified drink, filters out alcoholic ingredients, displays information on a page."""
     key = '9973533'
-    strDrink = request.form["strDrink"]
-    res = requests.get(f"{API_BASE_URL}/search.php?s={strDrink}",
-                       params={'key': key, 'strDrink': strDrink})
+    res = requests.get(f"{API_BASE_URL}/search.php?s={drinkName}",
+                       params={'key': key, 'strDrink': drinkName})
     data = res.json()
-    
+
     id = data["drinks"][0]["idDrink"]
     drinkName = data["drinks"][0]["strDrink"]
     tags = data["drinks"][0]["strTags"]
@@ -121,21 +70,24 @@ def get_drink():
 
     ingredients = []
     numIngredients = 15
+
+    def determine_alcoholic(ingredient):
+        return any(alcoholicIngredient['ingredient'] == ingredient for alcoholicIngredient in alcoholicIngredients)
+
     for i in range(1, numIngredients):
         ingredient = data["drinks"][0]["strIngredient" + str(i)]
         measure = data["drinks"][0]["strMeasure" + str(i)]
         if (ingredient is not None):
-            isAlcoholic = determineAlcohol(ingredient)
-            if (not isAlcoholic) :
-                ingredients.append(measure + " " + ingredient)
-            
-        
+            isAlcoholic = determine_alcoholic(ingredient)
+            if (not isAlcoholic):
+                ingredients.append(f"{measure or ''} {ingredient}")
         drink = { 'id': id, 'name': drinkName, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions, 'ingredients':ingredients} 
-          
-
+           
     return render_template('show_drinks.html', drink=drink, ingredients=ingredients)
 
-
+# THIS MAY BE USED TO DISPLAY DRINKS IN DATABASE
+# drinks = Drink.query.order_by(Post.created_at.desc()).limit(5).all()
+    
 # CHANGE THIS TO HANDLE SHOW_DRINK BUTTON
 # @app.route('/add_drink', methods=["GET", "POST"])
 # def create_drink():
@@ -161,7 +113,7 @@ def get_drink():
 
 @app.route('/add_drink', methods=["GET", "POST"])
 def add_drink():
-    """Using form found in navbar, user adds a drink to DB."""
+    """Using form found in navbar, user enters info into DrinkAddForm and submits a drink to DB."""
     
     # TODO: check to see if drink exists by searching by drink `name`
     # TODO: if drink does not exist, then add it to drink table
@@ -182,6 +134,14 @@ def add_drink():
     imageThumb = request.form.get("imageThumb")
 
     new_drink = Drink(drinkName=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures=measures, imageThumb=imageThumb)
+    # TRYING TO CHECK DB FOR DUPLICATE DRINKS
+    def check_db():
+        drinks = Drink.query.all()
+        for drinkName in drinks:
+            check_db(drinks)
+            if (drinkName in drinks):
+                print("Drink already exists!")
+        
     
     if request.method == 'POST':
         drinkName = Drink(drinkName=form.drinkName.data)
@@ -196,13 +156,12 @@ def add_drink():
         db.session.add(new_drink)
         db.session.commit()
         flash(f"{new_drink.drinkName} Added to Recipes")
-        return redirect('/add_drink')
+        return render_template("db_drinks.html", drinkName=drinkName)
     else:
         return render_template("add_drink.html", form=form, drinkName=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures = measures, imageThumb=imageThumb)
     
-###############
+###########################################################
 # USER REGISTER, LOGIN, LOGOUT
-
 @app.before_request
 def add_user_to_g():
     """If we're logged in, add curr user to Flask global."""
@@ -213,12 +172,10 @@ def add_user_to_g():
     else:
         g.user = None
 
-
 def do_login(user):
     """Log in user."""
 
     session[CURR_USER_KEY] = user.id
-
 
 def do_logout():
     """Logout user."""
@@ -226,7 +183,6 @@ def do_logout():
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
 
-    
 @app.route('/register', methods=['GET', 'POST'])
 def register_user():
     """Registers a user and authenticates user."""
@@ -281,8 +237,7 @@ def logout():
     flash("You have successfully logged out.", 'success')
     return redirect("/login")
 
-
-###############
+############################################################
 # USER SHOW, EDIT, DELETE
 @app.route('/users')
 def list_users():

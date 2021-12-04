@@ -46,3 +46,6 @@
     'strImageSource': 'https://www.instagram.com/p/CNLYC2_sdlk', 
     'strImageAttribution': None, 'strCreativeCommonsConfirmed': 'No', 
     'dateModified': None}]}
+
+
+    # BASE URL FOR SEARCH  http://www.thecocktaildb.com/api/json/v2/9973533/search.php?s=
