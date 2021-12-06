@@ -26,6 +26,19 @@ connect_db(app)
 db.create_all()
 db.session.commit()
 
+
+def serialize(self):
+        """Returns a dict representation of drink which we can turn into JSON"""
+        return {
+            'id': self.id,
+            'drinkName': self.drinkName,
+            'category' : self.category,
+            'glass' : self.glass,
+            'instructions': self.instructions,
+            'ingredients': self.ingredients,
+            'measures': self.measures,
+            'imageThumb': self.imageThumb
+        }
 ################################################################
 # DISPLAY PAGES, MAKE PAGES FUNCTION
 @app.route('/')
@@ -89,27 +102,17 @@ def get_drink(drinkName):
 # drinks = Drink.query.order_by(Post.created_at.desc()).limit(5).all()
     
 # CHANGE THIS TO HANDLE SHOW_DRINK BUTTON
-# @app.route('/add_drink', methods=["GET", "POST"])
-# def create_drink():
-#     """Creates a new drink from form data and returns JSON of that created drink"""
-    
-#     drinkName = request.json["drinkName"]
-#     tags = request.json["tags"]
-#     category = request.json["category"]
-#     glass = request.json["glass"]
-#     instructions = request.json["instructions"]
-#     ingredients = request.json["ingredients"]
-#     measures = request.json["measures"]
-#     imageThumb = request.json["imageThumb"]
-    
-#     new_drink = Drink(drinkName=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures=measures, imageThumb=imageThumb)
-    
-#     db.session.add(new_drink)
-#     db.session.commit()
+@app.route('/saved_drinks', methods=["GET"])
+def show_saved_drinks():
+    """Shows drinks saved in DB."""
+    # TODO: create page to show all of the user saved drinks
+    # TODO: redirect to page with all of user saved drinks  
+       
+    drinks = Drink.query.all()
+    serialized = [serialize(d) for d in drinks]
 
-#     response_json = jsonify(drink=new_drink.serialize())
-#     return (response_json, 201)
-
+    return jsonify(drinks=serialized)
+    return render_template("saved_drinks.html", drinks=drinks)
 
 @app.route('/add_drink', methods=["GET", "POST"])
 def add_drink():
@@ -119,8 +122,7 @@ def add_drink():
     # TODO: if drink does not exist, then add it to drink table
     # TODO: if drink exists, then get drink id
     # TODO: with drink id, tie it to user id
-    # TODO: create page to show all of the user saved drinks
-    # TODO: redirect to page with all of user saved drinks 
+
     # TODO: handle error
     
     form = DrinkAddForm(request.form)
@@ -156,10 +158,11 @@ def add_drink():
         db.session.add(new_drink)
         db.session.commit()
         flash(f"{new_drink.drinkName} Added to Recipes")
-        return render_template("db_drinks.html", drinkName=drinkName)
+        return redirect("/saved_drinks")
     else:
         return render_template("add_drink.html", form=form, drinkName=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures = measures, imageThumb=imageThumb)
-    
+
+
 ###########################################################
 # USER REGISTER, LOGIN, LOGOUT
 @app.before_request
