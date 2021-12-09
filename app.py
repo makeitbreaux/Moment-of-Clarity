@@ -26,19 +26,6 @@ connect_db(app)
 db.create_all()
 db.session.commit()
 
-
-def serialize(self):
-        """Returns a dict representation of drink which we can turn into JSON"""
-        return {
-            'id': self.id,
-            'drinkName': self.drinkName,
-            'category' : self.category,
-            'glass' : self.glass,
-            'instructions': self.instructions,
-            'ingredients': self.ingredients,
-            'measures': self.measures,
-            'imageThumb': self.imageThumb
-        }
 ################################################################
 # DISPLAY PAGES, MAKE PAGES FUNCTION
 @app.route('/')
@@ -104,25 +91,18 @@ def get_drink(drinkName):
 # CHANGE THIS TO HANDLE SHOW_DRINK BUTTON
 @app.route('/recipes', methods=["GET"])
 def show_saved_drinks():
-    """Shows drinks saved in DB."""
-    # TODO: create page to show all of the user saved drinks
-    # TODO: redirect to page with all of user saved drinks  
+    """Shows drinks saved in DB.""" 
 
- 
     drinks = Drink.query.all()
-
- 
     return render_template("recipes.html", drinks=drinks)
 
 @app.route('/add_drink', methods=["GET", "POST"])
 def add_drink():
     """Using form found in navbar, user enters info into DrinkAddForm and submits a drink to DB."""
-    
     # TODO: check to see if drink exists by searching by drink `name`
     # TODO: if drink does not exist, then add it to drink table
     # TODO: if drink exists, then get drink id
     # TODO: with drink id, tie it to user id
-
     # TODO: handle error
     
     form = DrinkAddForm(request.form)
@@ -136,15 +116,7 @@ def add_drink():
     imageThumb = request.form.get("imageThumb")
 
     new_drink = Drink(drinkName=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures=measures, imageThumb=imageThumb)
-    # TRYING TO CHECK DB FOR DUPLICATE DRINKS
-    # def check_db():
-    #     drinks = Drink.query.all()
-    #     for drinkName in drinks:
-    #         check_db(drinks)
-    #         if (drinkName in drinks):
-    #             print("Drink already exists!")
-        
-    
+
     if request.method == 'POST':
         drinkName = Drink(drinkName=form.drinkName.data)
         tags = Drink(tags=form.tags.data)

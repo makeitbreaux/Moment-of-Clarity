@@ -17,8 +17,6 @@ class UserAddForm(FlaskForm):
     
     email = EmailField("Email", validators=[InputRequired()])
     
-# ****** MAY NEED THIS FORM LATER *******
- 
 class UserEditForm(FlaskForm):
     """Form for editing users."""
     username = StringField("Username", validators=[InputRequired(), Length(min=1, max=30, message="Does Not Meet Length Requirements")])
