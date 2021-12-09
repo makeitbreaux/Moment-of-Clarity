@@ -137,12 +137,12 @@ def add_drink():
 
     new_drink = Drink(drinkName=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures=measures, imageThumb=imageThumb)
     # TRYING TO CHECK DB FOR DUPLICATE DRINKS
-    def check_db():
-        drinks = Drink.query.all()
-        for drinkName in drinks:
-            check_db(drinks)
-            if (drinkName in drinks):
-                print("Drink already exists!")
+    # def check_db():
+    #     drinks = Drink.query.all()
+    #     for drinkName in drinks:
+    #         check_db(drinks)
+    #         if (drinkName in drinks):
+    #             print("Drink already exists!")
         
     
     if request.method == 'POST':
@@ -158,7 +158,7 @@ def add_drink():
         db.session.add(new_drink)
         db.session.commit()
         flash(f"{new_drink.drinkName} Added to Recipes")
-        return redirect("/saved_drinks")
+        return redirect("/recipes")
     else:
         return render_template("add_drink.html", form=form, drinkName=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures = measures, imageThumb=imageThumb)
 
