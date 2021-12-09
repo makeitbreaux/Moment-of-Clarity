@@ -102,17 +102,17 @@ def get_drink(drinkName):
 # drinks = Drink.query.order_by(Post.created_at.desc()).limit(5).all()
     
 # CHANGE THIS TO HANDLE SHOW_DRINK BUTTON
-@app.route('/saved_drinks', methods=["GET"])
+@app.route('/recipes', methods=["GET"])
 def show_saved_drinks():
     """Shows drinks saved in DB."""
     # TODO: create page to show all of the user saved drinks
     # TODO: redirect to page with all of user saved drinks  
-       
-    drinks = Drink.query.all()
-    serialized = [serialize(d) for d in drinks]
 
-    return jsonify(drinks=serialized)
-    return render_template("saved_drinks.html", drinks=drinks)
+ 
+    drinks = Drink.query.all()
+
+ 
+    return render_template("recipes.html", drinks=drinks)
 
 @app.route('/add_drink', methods=["GET", "POST"])
 def add_drink():

@@ -1,0 +1,39 @@
+{% extends 'base.html'  %}
+
+{% block content %}
+
+
+{% if drinks %}
+{% for drink in drinks %}
+<div class="container">
+  <div class="row g-0">
+    <div class="col-md-4" style="padding: 5%;">
+      <img src=" {{ drink['image'] }} " style="width: 100%;" class="card-img-top" alt="...">
+      <h3 class="card-title"> {{ drink['drinkName'] }} </h3>
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Tags: {{ drink['tags'] }} </li>
+          <li class="list-group-item">Category: {{ drink['category'] }} </li>
+          <li class="list-group-item">Glass: {{drink['glass'] }} </li>
+
+
+          {% if ingredients%}
+          <li class="list-group-item">Ingredients: {% for ingredient in ingredients %}
+            <ol>{{ ingredient }} </ol>
+            {% endfor %}
+          </li>
+          {% endif %}
+
+          <li class="list-group-item">Instructions: {{ drink['instructions'] }} </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endfor %}
+{% endif %}
+
+{% endblock %}
