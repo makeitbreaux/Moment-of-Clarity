@@ -11,20 +11,16 @@
       <h3 class="card-title"> {{ drink['name'] }} </h3>
 
     
-      <form id="DrinkAddForm" method="POST" action="/add_drink">
-      
-        {% for field in form %}
-        <div class="form-group">
-          {{field.label}}
-          {{field}}
-        </div>
-        {% endfor %}
+      <form method="POST" action="/drink/{{ drinkName }}">
         <div class="d-grid gap-2 col-8 mx-auto">
-        <button type="submit" class="btn btn-outline-secondary btn-lg" form="DrinkAddForm">Add Drink</button>
-        </div>
+          <div class="btn-group-vertical btn-group-lg" role="group">
+        <button type="submit" class="btn btn-outline-success btn-lg" form="DrinkAddForm">Add Drink</button>
+       
     </form>
-
-
+    <form action="/drink/{{ drinkName }}" method="POST">
+      <button class="btn btn-outline-danger btn-lg">Delete</button>
+  </form>
+</div></div>
 
     </div>
     <div class="col-md-8">

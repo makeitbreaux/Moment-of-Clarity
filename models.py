@@ -40,7 +40,7 @@ class User(db.Model):
                       nullable=False,)
     
     # drinks = db.relationship('Drink', backref="users")
-    
+    # drinks = db.relationship('Drink', backref='users', lazy=True)
     drinks = db.Column(
         db.Integer,
         db.ForeignKey('users.id', ondelete="cascade"),

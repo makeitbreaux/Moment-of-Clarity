@@ -3,7 +3,7 @@ from re import template
 from flask import Flask, render_template, redirect, session, flash, jsonify, g, request
 import requests
 from flask_debugtoolbar import DebugToolbarExtension
-from models import Drink, connect_db, db, User, Drink
+from models import Drink, connect_db, db, User
 from forms import UserAddForm, DrinkAddForm, DrinkEditForm, LoginForm, UserEditForm
 from sqlalchemy.exc import IntegrityError
 from alcoholic import alcoholicIngredients
@@ -82,13 +82,27 @@ def get_drink(drinkName):
             if (not isAlcoholic):
                 ingredients.append(f"{measure or ''} {ingredient}")
         drink = { 'id': id, 'name': drinkName, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions, 'ingredients':ingredients} 
+    
+    # new_drink = Drink(drinkName=request.form.get("drinkName"))
+    # db.session.add(new_drink)
+    # db.session.commit()
+    # flash(f"{new_drink.drinkName} Added to Recipes")
            
     return render_template('show_drinks.html', drink=drink, ingredients=ingredients)
 
-# THIS MAY BE USED TO DISPLAY DRINKS IN DATABASE
-# drinks = Drink.query.order_by(Post.created_at.desc()).limit(5).all()
+    # def add_drink_to_db(drink):
     
-# CHANGE THIS TO HANDLE SHOW_DRINK BUTTON
+@app.route('/drink/<string:drinkName>', methods=["DELETE"])
+def delete_drink(drinkName):
+    """Deletes a particular drink"""
+    # drinkName = Drink.query.with_entities(Drink.drinkName).all()
+    get_drink = Drink.query.get(drinkName)
+    db.session.delete(get_drink)
+    db.session.commit()
+
+    flash(f"{drinkName} Deleted")
+    return redirect("/recipes")
+    
 @app.route('/recipes', methods=["GET"])
 def show_saved_drinks():
     """Shows drinks saved in DB.""" 
@@ -104,7 +118,7 @@ def add_drink():
     # TODO: if drink exists, then get drink id
     # TODO: with drink id, tie it to user id
     # TODO: handle error
-    
+     
     form = DrinkAddForm(request.form)
     drinkName = request.form.get("drinkName")
     tags = request.form.get("tags")
@@ -133,6 +147,7 @@ def add_drink():
         return redirect("/recipes")
     else:
         return render_template("add_drink.html", form=form, drinkName=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures = measures, imageThumb=imageThumb)
+
 
 
 ###########################################################

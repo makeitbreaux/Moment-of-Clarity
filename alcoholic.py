@@ -3,6 +3,9 @@ alcoholicIngredients = [
             "ingredient" : "Vodka"
         },
         {
+            "ingredient" : "Beer"
+        },
+        {
             "ingredient" : "Gin"
         },
         {
