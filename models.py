@@ -87,7 +87,7 @@ class User(db.Model):
         return False
 
 
-
+# NEED TO KEEP ID AS ID AND NOT DRINK_ID
 class Drink(db.Model):
     """Drinks Model"""
     __tablename__ = 'drinks'

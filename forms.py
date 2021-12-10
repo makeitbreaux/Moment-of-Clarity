@@ -29,7 +29,7 @@ class UserEditForm(FlaskForm):
     
     email = StringField("Email", validators=[DataRequired()])
 
-
+# NEED TO FIGURE OUT HOW TO ADD USER_ID WHEN DRINKS ARE ADDED
 class DrinkAddForm(FlaskForm):
     """Form for adding drinks."""
     drinkName = StringField("Name", validators=[DataRequired()])

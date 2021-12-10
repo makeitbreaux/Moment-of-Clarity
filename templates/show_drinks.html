@@ -10,43 +10,44 @@
       <img src=" {{ drink['image'] }} " style="width: 100%;" class="card-img-top" alt="...">
       <h3 class="card-title"> {{ drink['name'] }} </h3>
 
-    
+<!-- THESE ARE THE BUTTONS THAT ADD/DELETE DRINKS FROM /SHOW_DRINK -->
       <form method="POST" action="/drink/{{ drinkName }}">
         <div class="d-grid gap-2 col-8 mx-auto">
           <div class="btn-group-vertical btn-group-lg" role="group">
-        <button type="submit" class="btn btn-outline-success btn-lg" form="DrinkAddForm">Add Drink</button>
-       
-    </form>
-    <form action="/drink/{{ drinkName }}" method="POST">
-      <button class="btn btn-outline-danger btn-lg">Delete</button>
-  </form>
-</div></div>
+            <button type="submit" class="btn btn-outline-success btn-lg" form="DrinkAddForm">Add Drink</button>
 
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">Tags: {{ drink['tags'] }} </li>
-          <li class="list-group-item">Category: {{ drink['category'] }} </li>
-          <li class="list-group-item">Glass: {{drink['glass'] }} </li>
-
-
-           {% if ingredients%}
-          <li class="list-group-item">Ingredients: {% for ingredient in ingredients %}
-            <ol>{{ ingredient }} </ol> 
-              {% endfor %}
-          </li>
-          {% endif %}
-          
-          <li class="list-group-item">Instructions: {{ drink['instructions'] }} </li>
-
-
-
-        </ul>
-      </div>
+      </form>
+      <form action="/drink/{{ drinkName }}" method="POST">
+        <button class="btn btn-outline-danger btn-lg">Delete</button>
+      </form>
     </div>
   </div>
+
+</div>
+<div class="col-md-8">
+  <div class="card-body">
+
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">Tags: {{ drink['tags'] }} </li>
+      <li class="list-group-item">Category: {{ drink['category'] }} </li>
+      <li class="list-group-item">Glass: {{drink['glass'] }} </li>
+
+
+      {% if ingredients%}
+      <li class="list-group-item">Ingredients: {% for ingredient in ingredients %}
+        <ol>{{ ingredient }} </ol>
+        {% endfor %}
+      </li>
+      {% endif %}
+
+      <li class="list-group-item">Instructions: {{ drink['instructions'] }} </li>
+
+
+
+    </ul>
+  </div>
+</div>
+</div>
 </div>
 </div>
 

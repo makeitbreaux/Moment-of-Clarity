@@ -83,14 +83,13 @@ def get_drink(drinkName):
                 ingredients.append(f"{measure or ''} {ingredient}")
         drink = { 'id': id, 'name': drinkName, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions, 'ingredients':ingredients} 
     
+# THIS IS MY ATTEMPT TO ADD A DRINK DIRECTLY FROM /SHOW_DRINKS
     # new_drink = Drink(drinkName=request.form.get("drinkName"))
     # db.session.add(new_drink)
     # db.session.commit()
     # flash(f"{new_drink.drinkName} Added to Recipes")
            
     return render_template('show_drinks.html', drink=drink, ingredients=ingredients)
-
-    # def add_drink_to_db(drink):
     
 @app.route('/drink/<string:drinkName>', methods=["DELETE"])
 def delete_drink(drinkName):

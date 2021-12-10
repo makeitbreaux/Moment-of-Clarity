@@ -1,3 +1,4 @@
+// TRYING TO GET DELETE BUTTON ON /SHOW_DRINKS TO WORK
 $('.delete-drink').click(deleteDrink)
 
 async function deleteDrink() {
@@ -6,6 +7,7 @@ async function deleteDrink() {
   $(this).parent().remove()
 }
 
+// TRYING TO GET ADD BUTTON ON /SHOW_DRINKS TO WORK
 // $('.add-drink').click(addDrink)
 
 // async function addDrink() {
