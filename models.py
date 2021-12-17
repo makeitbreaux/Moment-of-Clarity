@@ -37,7 +37,7 @@ class User(db.Model):
                          nullable=False)
     
     email = db.Column(db.Text, 
-                      nullable=False,)
+                      nullable=False)
     
     # drinks = db.relationship('Drink', backref="users")
     # drinks = db.relationship('Drink', backref='users', lazy=True)
@@ -99,7 +99,7 @@ class Drink(db.Model):
     user_id = db.Column(db.Integer, 
                         db.ForeignKey('users.id')) 
     
-    drinkName = db.Column(db.String)
+    drink_name = db.Column(db.String)
     
     tags = db.Column(db.String)
     
@@ -113,7 +113,7 @@ class Drink(db.Model):
     
     measures = db.Column(db.String)
     
-    imageThumb = db.Column(db.String)
+    image_thumb = db.Column(db.String)
     
     user = db.relationship('User', backref="drinks")
     

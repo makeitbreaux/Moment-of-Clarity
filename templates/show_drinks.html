@@ -7,43 +7,37 @@
 <div class="container">
   <div class="row g-0">
     <div class="col-md-4" style="padding: 5%;">
-      <img src=" {{ drink['image'] }} " style="width: 100%;" class="card-img-top" alt="...">
-      <h3 class="card-title"> {{ drink['name'] }} </h3>
+      <img id="drink_image_thumb" src=" {{ drink['image'] }} " style="width: 100%;" class="card-img-top" alt="...">
+      <h3 id="drink_name" class="card-title">{{ drink['name'] }}</h3>
 
-<!-- THESE ARE THE BUTTONS THAT ADD/DELETE DRINKS FROM /SHOW_DRINK -->
-      <form method="POST" action="/drink/{{ drinkName }}">
-        <div class="d-grid gap-2 col-8 mx-auto">
-          <div class="btn-group-vertical btn-group-lg" role="group">
-            <button type="submit" class="btn btn-outline-success btn-lg" form="DrinkAddForm">Add Drink</button>
-
-      </form>
-      <form action="/drink/{{ drinkName }}" method="POST">
-        <button class="btn btn-outline-danger btn-lg">Delete</button>
-      </form>
+      <!-- THESE ARE THE BUTTONS THAT ADD/DELETE DRINKS FROM /SHOW_DRINK -->
+      <div class="d-grid gap-2 col-8 mx-auto">
+        <div class="btn-group-vertical btn-group-lg" role="group">
+            <div id="add-drink" class="btn btn-outline-success btn-lg">Add Drink</div>
+          <form action="/drink/{{ drinkName }}" method="POST">
+            <button class="btn btn-outline-danger btn-lg">Delete</button>
+          </form>
     </div>
   </div>
 
 </div>
 <div class="col-md-8">
   <div class="card-body">
-
     <ul class="list-group list-group-flush">
-      <li class="list-group-item">Tags: {{ drink['tags'] }} </li>
-      <li class="list-group-item">Category: {{ drink['category'] }} </li>
-      <li class="list-group-item">Glass: {{drink['glass'] }} </li>
 
+      <li class="list-group-item">Tags: <span id="drink_tags">{{ drink['tags'] }}</span></li>
+      <li class="list-group-item">Category: <span id="drink_category">{{ drink['category'] }}</span></li>
+      <li class="list-group-item">Glass: <span id="drink_glass">{{ drink['glass'] }}</span></li>
 
       {% if ingredients%}
-      <li class="list-group-item">Ingredients: {% for ingredient in ingredients %}
-        <ol>{{ ingredient }} </ol>
+      <li class="list-group-item">Ingredients:
+        {% for ingredient in ingredients %}
+          <ol>{{ ingredient }}</ol>
         {% endfor %}
       </li>
       {% endif %}
 
-      <li class="list-group-item">Instructions: {{ drink['instructions'] }} </li>
-
-
-
+      <li class="list-group-item">Instructions: <span id="drink_instructions">{{ drink['instructions'] }}</span></li>
     </ul>
   </div>
 </div>

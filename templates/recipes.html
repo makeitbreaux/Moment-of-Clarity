@@ -9,17 +9,16 @@
 <div class="container">
   <div class="row g-0">
     <div class="col-md-4" style="padding: 5%;">
-      <img src=" {{ drink.image }} " style="width: 100%;" class="card-img-top" alt="...">
-      <a class="card-title"> <a href="/drink/{{ drink.drinkName }}">{{ drink['drinkName'] }} </a>  </h3>
+      <img src=" {{ drink.image_thumb }} " style="width: 100%;" class="card-img-top" alt="...">
+      <a class="card-title"> <a href="/drink/{{ drink.drink_name }}">{{ drink['drink_name'] }} </a>  </h3>
 
     </div>
     <div class="col-md-8">
       <div class="card-body">
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">Tags: {{ drink['tags'] }} </li>
-          <li class="list-group-item">Category: {{ drink['category'] }} </li>
-          <li class="list-group-item">Glass: {{drink['glass'] }} </li>
-
+          <li class="list-group-item">Tags: {{ drink['tags'] }}</li>
+          <li class="list-group-item">Category: {{ drink['category'] }}</li>
+          <li class="list-group-item">Glass: {{ drink['glass'] }}</li>
 
           {% if ingredients%}
           <li class="list-group-item">Ingredients: {% for ingredient in ingredients %}
