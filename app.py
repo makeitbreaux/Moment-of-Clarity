@@ -17,7 +17,7 @@ app.config["SQLALCHEMY_ECHO"] = True
 app.config["SECRET_KEY"] = "abc123"
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
-CURR_USER_KEY = "curr_user"
+CURR_USER_KEY = "user_id" # "curr_user"
 API_BASE_URL = "http://www.thecocktaildb.com/api/json/v2/9973533"
 toolbar = DebugToolbarExtension(app)
 database = "postgresql:///drinks"
@@ -44,7 +44,6 @@ def index_page():
         randomDrink = {'image': image, 'drinkName': drinkName}
         return randomDrink
     randomDrinks = list(map(transformDrinks, data["drinks"]))
-    print(randomDrinks)
     return render_template('index.html', randomDrinks=randomDrinks)
 
 @app.route('/drink', methods=["POST"])
@@ -105,7 +104,7 @@ def delete_drink(drinkName):
 @app.route('/recipes', methods=["GET"])
 def show_saved_drinks():
     """Shows drinks saved in DB.""" 
-
+    # JEN: we don't want to show all drinks, BUT only drinks that is tied to user
     drinks = Drink.query.all()
     return render_template("recipes.html", drinks=drinks)
 
@@ -117,37 +116,38 @@ def add_drink():
     # TODO: if drink exists, then get drink id
     # TODO: with drink id, tie it to user id
     # TODO: handle error
-     
-    form = DrinkAddForm(request.form)
-    drinkName = request.form.get("drinkName")
-    tags = request.form.get("tags")
-    category = request.form.get("category")
-    glass = request.form.get("glass")
-    instructions = request.form.get("instructions")
-    ingredients = request.form.get("ingredients")
-    measures = request.form.get("measures")
-    imageThumb = request.form.get("imageThumb")
+    
+    if request.method == 'GET':
+        form = DrinkAddForm(request.form)
+        return render_template("add_drink.html", form=form)
 
-    new_drink = Drink(drinkName=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures=measures, imageThumb=imageThumb)
+    if request.method == 'POST': 
+        # request is from the add_drink button (data from API)
+        if request.json is not None:
+            drinkName = request.json.get("drink_name")
+            tags = request.json.get("tags")
+            category = request.json.get("category")
+            glass = request.json.get("glass")
+            instructions = request.json.get("instructions")
+            ingredients = request.json.get("ingredients")
+            measures = request.json.get("measures")
+            imageThumb = request.json.get("image_thumb")
 
-    if request.method == 'POST':
-        drinkName = Drink(drinkName=form.drinkName.data)
-        tags = Drink(tags=form.tags.data)
-        category = Drink(category=form.category.data)
-        glass = Drink(glass=form.glass.data)
-        instructions = Drink(instructions=form.instructions.data)
-        ingredients = Drink(ingredients=form.ingredients.data)
-        measures = Drink(measures=form.measures.data)
-        imageThumb = Drink(imageThumb=form.imageThumb.data)
-        
+        # request is from the add_drink form (data is manually inputted)
+        elif request.form is not None:
+            drinkName = request.form.get("drink_name")
+            tags = request.form.get("tags")
+            category = request.form.get("category")
+            glass = request.form.get("glass")
+            instructions = request.form.get("instructions")
+            ingredients = request.form.get("ingredients")
+            measures = request.form.get("measures")
+            imageThumb = request.form.get("image_thumb")
+
+        new_drink = Drink(user_id=session[CURR_USER_KEY], drink_name=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures=measures, image_thumb=imageThumb)
         db.session.add(new_drink)
         db.session.commit()
-        flash(f"{new_drink.drinkName} Added to Recipes")
-        return redirect("/recipes")
-    else:
-        return render_template("add_drink.html", form=form, drinkName=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures = measures, imageThumb=imageThumb)
-
-
+        return redirect('/recipes')
 
 ###########################################################
 # USER REGISTER, LOGIN, LOGOUT
@@ -193,7 +193,7 @@ def register_user():
         except IntegrityError:
             form.username.errors.append('Username taken.  Please pick another')
             return render_template('register.html', form=form)
-        session['user_id'] = new_user.id
+        do_login(new_user)
         flash('Welcome! Successfully Created Your Account!', "success")
         return redirect('/')
 
@@ -211,7 +211,7 @@ def login_user():
         if user:
             flash(f"Welcome Back, {user.username}!", "primary")
             session['user_id'] = user.id
-            return redirect('/drinks')
+            return redirect('/') # route /drinks don't exist anymore
         else:
             form.username.errors = ['Invalid username/password.']
             return redirect('/')

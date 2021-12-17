@@ -32,7 +32,7 @@ class UserEditForm(FlaskForm):
 # NEED TO FIGURE OUT HOW TO ADD USER_ID WHEN DRINKS ARE ADDED
 class DrinkAddForm(FlaskForm):
     """Form for adding drinks."""
-    drinkName = StringField("Name", validators=[DataRequired()])
+    drink_name = StringField("Name", validators=[DataRequired()])
     
     tags = StringField("Tags")
     
@@ -46,11 +46,11 @@ class DrinkAddForm(FlaskForm):
     
     measures = TextAreaField("Measures", validators=[InputRequired(), Length(min=1, max=500)])
     
-    imageThumb = URLField('(Optional) Image URL')
+    image_thumb = URLField('(Optional) Image URL')
 
 class DrinkEditForm(FlaskForm):
     """Form for adding drinks."""
-    drinkName = StringField("Name", validators=[DataRequired()])
+    drink_name = StringField("Name", validators=[DataRequired()])
     
     tags = StringField("Tags")
     
@@ -64,10 +64,12 @@ class DrinkEditForm(FlaskForm):
     
     measures = TextAreaField("Measures", validators=[InputRequired(), Length(min=1, max=500)])
     
-    imageThumb = StringField('(Optional) Image URL')
+    image_thumb = StringField('(Optional) Image URL')
 
 class LoginForm(FlaskForm):
     """Login form."""
 
     username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[Length(min=6)])
+    # Jen: why validate to min=6? you should have register form's password field
+    # also have same min lenght validation
+    password = PasswordField('Password', validators=[Length(min=4)]) 
