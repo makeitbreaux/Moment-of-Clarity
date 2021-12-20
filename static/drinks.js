@@ -1,10 +1,10 @@
 // TRYING TO GET DELETE BUTTON ON /SHOW_DRINKS TO WORK
-$('.delete-drink').click(deleteDrink)
+$('#delete-drink').click(deleteDrink)
 
 async function deleteDrink() {
   const drinkName = $(this).data('drinkName')
   await axios.delete(`/drink/${drinkName}`)
-  $(this).parent().remove()
+  $(this).parent().pop()
 }
 
 $('#add-drink').click(addDrink)

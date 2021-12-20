@@ -3,6 +3,13 @@
 {% block content %}
 
 
+{% for message in get_flashed_messages() %}
+<div class="alert alert-info">
+   {{ message }}
+
+ </div>
+{% endfor %}
+
 {% if drink %}
 <div class="container">
   <div class="row g-0">
@@ -13,9 +20,8 @@
       <!-- THESE ARE THE BUTTONS THAT ADD/DELETE DRINKS FROM /SHOW_DRINK -->
       <div class="d-grid gap-2 col-8 mx-auto">
         <div class="btn-group-vertical btn-group-lg" role="group">
-            <div id="add-drink" class="btn btn-outline-success btn-lg">Add Drink</div>
-          <form action="/drink/{{ drinkName }}" method="POST">
-            <button class="btn btn-outline-danger btn-lg">Delete</button>
+            <div action="/drink/{{ drinkName }}" id="add-drink" method="POST" class="btn btn-outline-success btn-lg">Add Drink</div>
+          <form action="/drink/{{ drinkName }}" id="add-drink" method="POST">
           </form>
     </div>
   </div>

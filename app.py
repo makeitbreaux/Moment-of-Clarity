@@ -81,12 +81,6 @@ def get_drink(drinkName):
             if (not isAlcoholic):
                 ingredients.append(f"{measure or ''} {ingredient}")
         drink = { 'id': id, 'name': drinkName, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions, 'ingredients':ingredients} 
-    
-# THIS IS MY ATTEMPT TO ADD A DRINK DIRECTLY FROM /SHOW_DRINKS
-    # new_drink = Drink(drinkName=request.form.get("drinkName"))
-    # db.session.add(new_drink)
-    # db.session.commit()
-    # flash(f"{new_drink.drinkName} Added to Recipes")
            
     return render_template('show_drinks.html', drink=drink, ingredients=ingredients)
     
@@ -110,7 +104,7 @@ def show_saved_drinks():
 
 @app.route('/add_drink', methods=["GET", "POST"])
 def add_drink():
-    """Using form found in navbar, user enters info into DrinkAddForm and submits a drink to DB."""
+    """Using form found in navbar, user enters info into DrinkAddForm and submits a drink to DB. Also handles "Add Drink" button in /show_drinks"""
     # TODO: check to see if drink exists by searching by drink `name`
     # TODO: if drink does not exist, then add it to drink table
     # TODO: if drink exists, then get drink id
@@ -124,6 +118,7 @@ def add_drink():
     if request.method == 'POST': 
         # request is from the add_drink button (data from API)
         if request.json is not None:
+            user_id = request.json.get("user_id")
             drinkName = request.json.get("drink_name")
             tags = request.json.get("tags")
             category = request.json.get("category")
@@ -147,6 +142,7 @@ def add_drink():
         new_drink = Drink(user_id=session[CURR_USER_KEY], drink_name=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures=measures, image_thumb=imageThumb)
         db.session.add(new_drink)
         db.session.commit()
+        # flash('Drink Added!', "success")
         return redirect('/recipes')
 
 ###########################################################
