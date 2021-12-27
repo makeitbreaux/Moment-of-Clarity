@@ -1,12 +1,14 @@
 {% extends 'base.html'  %}
 
 {% block content %}
-
-
-
+<div class="container">
+<h1 class="display-1">Browse Drinks</h1>
+<p class="lead">Look through all of the drinks you have added to your Recipe Catalogue!</p>
+</div>
 {% if drinks %}
 {% for drink in drinks %}
 <div class="container">
+
   <div class="row g-0">
     <div class="col-md-4" style="padding: 5%;">
       <img src=" {{ drink.image_thumb }} " style="width: 100%;" class="card-img-top" alt="...">

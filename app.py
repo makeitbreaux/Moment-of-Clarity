@@ -96,10 +96,16 @@ def delete_drink(drinkName):
     return redirect("/recipes")
     
 @app.route('/recipes', methods=["GET"])
-def show_saved_drinks():
+def show_saved_drinks(user_id):
     """Shows drinks saved in DB.""" 
     # JEN: we don't want to show all drinks, BUT only drinks that is tied to user
-    drinks = Drink.query.all()
+
+    search = request.args.get('user_id')
+
+    if not search:
+        drinks = Drink.query.all()
+    else:
+        drinks = Drink.query.filter(Drink.drink_name.like(f"%{search}%")).all()
     return render_template("recipes.html", drinks=drinks)
 
 @app.route('/add_drink', methods=["GET", "POST"])
@@ -188,7 +194,7 @@ def register_user():
             db.session.commit()
         except IntegrityError:
             form.username.errors.append('Username taken.  Please pick another')
-            return render_template('register.html', form=form)
+            return render_template('users/register.html', form=form)
         do_login(new_user)
         flash('Welcome! Successfully Created Your Account!', "success")
         return redirect('/')
@@ -197,20 +203,21 @@ def register_user():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_user():
-    """Logs a user in."""
-    form = LoginForm()
-    if form.validate_on_submit():
-        username = form.username.data
-        password = form.password.data
+    """Handle user login."""
 
-        user = User.authenticate(username, password)
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        user = User.authenticate(form.username.data,
+                                 form.password.data)
+
         if user:
-            flash(f"Welcome Back, {user.username}!", "primary")
-            session['user_id'] = user.id
-            return redirect('/') # route /drinks don't exist anymore
-        else:
-            form.username.errors = ['Invalid username/password.']
-            return redirect('/')
+            do_login(user)
+            flash(f"Hello, {user.username}!", "success")
+            return redirect("/")
+
+        flash("Invalid credentials.", 'danger')
+
     return render_template('users/login.html', form=form)
 
 @app.route('/logout')
