@@ -71,7 +71,7 @@ def get_drink(drinkName):
     numIngredients = 15
 
     def determine_alcoholic(ingredient):
-        return any(alcoholicIngredient['ingredient'] == ingredient for alcoholicIngredient in alcoholicIngredients)
+        return any(alcoholicIngredient['ingredient'].lower() == ingredient.lower() for alcoholicIngredient in alcoholicIngredients)
 
     for i in range(1, numIngredients):
         ingredient = data["drinks"][0]["strIngredient" + str(i)]
