@@ -84,7 +84,7 @@ def get_drink(drinkName):
            
     return render_template('show_drinks.html', drink=drink, ingredients=ingredients)
     
-@app.route('/drink/<string:drinkName>', methods=["DELETE"])
+@app.route('/drink/<string:drinkName>', methods=["POST"])
 def delete_drink(drinkName):
     """Deletes a particular drink"""
     # drinkName = Drink.query.with_entities(Drink.drinkName).all()
@@ -124,7 +124,7 @@ def add_drink():
     if request.method == 'POST': 
         # request is from the add_drink button (data from API)
         if request.json is not None:
-            user_id = request.json.get("user_id")
+            # user_id = request.json.get("user_id")
             drinkName = request.json.get("drink_name")
             tags = request.json.get("tags")
             category = request.json.get("category")
@@ -148,7 +148,7 @@ def add_drink():
         new_drink = Drink(user_id=session[CURR_USER_KEY], drink_name=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures=measures, image_thumb=imageThumb)
         db.session.add(new_drink)
         db.session.commit()
-        # flash('Drink Added!', "success")
+        flash('Drink Added!', "success")
         return redirect('/recipes')
 
 ###########################################################
@@ -230,30 +230,7 @@ def logout():
     return redirect("/login")
 
 ############################################################
-# USER SHOW, EDIT, DELETE
-@app.route('/users')
-def list_users():
-    """Page with listing of users.
-
-    Can take a 'q' param in querystring to search by that username.
-    """
-
-    search = request.args.get('q')
-
-    if not search:
-        users = User.query.all()
-    else:
-        users = User.query.filter(User.username.like(f"%{search}%")).all()
-
-    return render_template('users/index.html', users=users)
-
-@app.route('/users/<int:user_id>')
-def users_show(user_id):
-    """Show user profile."""
-
-    user = User.query.get_or_404(user_id)
-
-    return render_template('users/show.html', user=user)
+# USER EDIT, DELETE
 
 @app.route('/users/profile', methods=["GET", "POST"])
 def edit_profile():
@@ -271,11 +248,11 @@ def edit_profile():
             user.username = form.username.data
             user.first_name = form.first_name.data
             user.last_name = form.last_name.data
-            user.password = form.password.data
             user.email = form.email.data
           
             db.session.commit()
-            return redirect(f"/users/{user.id}")
+            flash("Profile Changed", 'success')
+            return redirect(f"/users/profile")
 
         flash("Wrong password, please try again.", 'danger')
 
@@ -295,3 +272,9 @@ def delete_user():
     db.session.commit()
 
     return redirect("/register")
+
+@app.errorhandler(404)
+def page_not_found(e):
+    """404 NOT FOUND page."""
+
+    return render_template('404.html'), 404

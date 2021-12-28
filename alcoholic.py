@@ -324,6 +324,9 @@ alcoholicIngredients = [
             "ingredient": "Jagermeister"
         },
         {
+            "ingredient": "Jägermeister"
+        },
+        {
             "ingredient": "Jim Beam"
         },
         {
