@@ -1,3 +1,4 @@
+# Moment of Clarity
 A mocktail website that offers alcohol-free alternatives for all of your old alcoholic favorites!
 
 The goal of my website is to offer people in sobriety, or people considering sobriety, a guide to alcohol-free mocktails. The sober/sober-curious will be able to type in their old favorite alcoholic drink and be presented with the alcohol-free version. They will also have the ability to save their favorite drinks to their database, and in the future, I would like to try to include a shop option, where users can pick the ingredients needed to make their mocktails and purchase them online. It is my hope that this website will be able to help people that are just journeying into sobriety make their social outings a little less awkward, or even enhance a nice alcohol-free evening in.
