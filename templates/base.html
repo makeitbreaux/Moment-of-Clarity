@@ -13,14 +13,7 @@
     <div class="container">
       <a href="/" class="navbar-brand text-light">Moment of Clarity</a>
       <ul class="nav navbar-nav flex-row float-right">
-        
-        <li class="nav-item">
-          <a class="nav-link pr-3 text-light" href="/add_drink">Add a Drink</a>
-        </li>
-        
-        <li class="nav-item">
-          <a class="nav-link pr-3 text-light" href="/recipes">Recipes</a>
-        </li>
+
         {% if not g.user %}
           <li class="nav-item">
             <a class="nav-link pr-3 text-light" href="/login">Login</a>
@@ -32,6 +25,13 @@
           <li>
             <a href="/users/{{ g.user.id }}">
             </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link pr-3 text-light" href="/add_drink">Add a Drink</a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link pr-3 text-light" href="/recipes">Recipes</a>
           </li>
           <li class="nav-item">
             <a class="nav-link pr-3 text-light" href="/logout">Logout</a>

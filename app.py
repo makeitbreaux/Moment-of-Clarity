@@ -96,11 +96,11 @@ def delete_drink(drinkName):
     return redirect("/recipes")
     
 @app.route('/recipes', methods=["GET"])
-def show_saved_drinks(user_id):
+def show_saved_drinks():
     """Shows drinks saved in DB.""" 
     # JEN: we don't want to show all drinks, BUT only drinks that is tied to user
 
-    search = request.args.get('user_id')
+    search = request.args.get('drink_name')
 
     if not search:
         drinks = Drink.query.all()

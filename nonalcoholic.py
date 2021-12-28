@@ -1,5 +1,4 @@
-nonAlcoholicIngredients = {
-    "nonAlcoholicIngredients": [
+nonAlcoholicIngredients = [
         {
             "ingredient": "Agave Syrup"
         },
@@ -773,4 +772,3 @@ nonAlcoholicIngredients = {
         }
 
     ]
-}
