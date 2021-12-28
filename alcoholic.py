@@ -9,6 +9,9 @@ alcoholicIngredients = [
             "ingredient" : "Gin"
         },
         {
+            "ingredient" : "Absinthe"
+        },
+        {
             "ingredient" : "Galliano"
         },
         {
