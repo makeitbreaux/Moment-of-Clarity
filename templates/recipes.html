@@ -13,13 +13,20 @@
     <div class="col-md-4" style="padding: 5%;">
       <img src=" {{ drink.image_thumb }} " style="width: 100%;" class="card-img-top" alt="...">
 
-      <!-- <h5 class="card-title"> {{ drink['drink_name'] }}  </h5></div> -->
+
         <div class="col-md-4" style="padding: 1%;">
 
         <a class="card-title"> <a href="/drink/{{ drink.drink_name }}">{{ drink['drink_name'] }} </a>  </h3>
 
     </div>
-    <button id="delete-drink" class="btn btn-outline-danger btn-lg">Delete</button></div>
+<!-- 
+    STILL CANNOT GET DELETE BUTTON TO WORK -->
+    <div action="/drink/{{ drinkName }}/delete" id="delete_drink" method="POST" class="btn btn-outline-danger btn-lg">Delete Drink</div>
+    <form action="/drink/{{ drinkName }}/delete" id="delete_drink" method="POST">
+    </form>
+
+
+  </div>
     <div class="col-md-8">
       <div class="card-body">
         <ul class="list-group list-group-flush">

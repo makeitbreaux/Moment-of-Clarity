@@ -84,15 +84,18 @@ def get_drink(drinkName):
            
     return render_template('show_drinks.html', drink=drink, ingredients=ingredients)
     
-@app.route('/drink/<string:drinkName>', methods=["POST"])
+@app.route('/drink/<string:drinkName>/delete', methods=["GET", "POST"])
 def delete_drink(drinkName):
     """Deletes a particular drink"""
-    # drinkName = Drink.query.with_entities(Drink.drinkName).all()
-    get_drink = Drink.query.get(drinkName)
-    db.session.delete(get_drink)
-    db.session.commit()
+    drink = Drink.query.filter_by(drinkName=drinkName).first()
 
-    flash(f"{drinkName} Deleted")
+    if drink:
+            db.session.delete(drink)
+            db.session.commit()
+            flash(f"Drink Deleted")
+            return redirect('/recipes')
+
+
     return redirect("/recipes")
     
 @app.route('/recipes', methods=["GET"])
