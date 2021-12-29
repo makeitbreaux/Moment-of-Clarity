@@ -31,3 +31,11 @@ async function addDrink(e) {
     image_thumb
   });
 }
+
+// TRYING TO GET BUTTON TO DISABLE AFTER CLICK
+function disableAddButton() {
+  document.querySelector('#add-drink').addEventListener('submit', function(e) {
+  e.preventDefault();
+});
+document.querySelector('#my-form button').disabled = true;
+}

@@ -7,10 +7,15 @@
 
 import os
 from unittest import TestCase
-
-
+from app import app
 
 from models import db, User
+
+app.config['TESTING'] = True
+app.config['DEBUG_TB_HOSTS'] = ['dont-show-debug-toolbar']
+
+
+
 
 # BEFORE we import our app, let's set an environmental variable
 # to use a different database for tests (we need to do this
