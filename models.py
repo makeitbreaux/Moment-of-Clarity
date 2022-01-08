@@ -121,15 +121,30 @@ class Drink(db.Model):
         """Returns a dict representation of drink which we can turn into JSON"""
         return {
             'id': self.id,
-            'drinkName': self.drinkName,
+            'drinkName': self.drink_name,
             'category' : self.category,
             'glass' : self.glass,
             'instructions': self.instructions,
             'ingredients': self.ingredients,
             'measures': self.measures,
-            'imageThumb': self.imageThumb
+            'imageThumb': self.image_thumb
         }
 
     def __repr__(self):
-        return f"<Drink {self.id}, drinkName={self.drinkName}, category={self.category}, glass={self.glass}, instructions={self.instructions}, ingredients={self.ingredients}, measures={self.measures}, imageThumb={self.imageThumb}>"
+        return f"<Drink {self.id}, drinkName={self.drink_name}, category={self.category}, glass={self.glass}, instructions={self.instructions}, ingredients={self.ingredients}, measures={self.measures}, imageThumb={self.image_thumb}>"
 
+# ADDED THIS TABLE TO TRY AND TIE USERS TO THE DRINKS THEY CREATE
+class UserDrinks(db.Model):
+    """Model for table that shows a user's drinks"""
+
+    id = db.Column(db.Integer, 
+                   primary_key=True, 
+                   autoincrement=True)
+    
+    user_id = db.Column(db.Integer, 
+                        db.ForeignKey('users.id'))
+    
+    drink_name = db.Column(db.String)
+    
+    user = db.relationship('User', backref="users")
+    
