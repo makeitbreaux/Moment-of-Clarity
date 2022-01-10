@@ -1,9 +1,10 @@
 // TRYING TO GET DELETE BUTTON ON /SHOW_DRINKS TO WORK
 $('#delete-drink').click(deleteDrink)
 
-async function deleteDrink() {
-  const drinkName = $(this).data('drinkName')
-  await axios.delete(`/drink/${drinkName}`)
+async function deleteDrink(e) {
+  e.preventDefault();
+  const drink_name = $(this).data('drink_name')
+  await axios.delete(`/drink/${drink_name}`)
   $(this).parent().pop()
 }
 
@@ -30,12 +31,11 @@ async function addDrink(e) {
     measures,
     image_thumb
   });
+
+  $('#add-drink').attr("disabled", true);
 }
 
 // TRYING TO GET BUTTON TO DISABLE AFTER CLICK
-function disableAddButton() {
-  document.querySelector('#add-drink').addEventListener('submit', function(e) {
-  e.preventDefault();
-});
-document.querySelector('#my-form button').disabled = true;
-}
+// function disableAddButton = (e) => {
+//   $('#add-drink').prop('disabled', true)
+// };

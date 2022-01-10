@@ -17,10 +17,10 @@
       <img id="drink_image_thumb" src=" {{ drink['image'] }} " style="width: 100%;" class="card-img-top" alt="...">
       <h3 id="drink_name" class="card-title">{{ drink['name'] }}</h3>
 
-      <!-- THESE ARE THE BUTTONS THAT ADD/DELETE DRINKS FROM /SHOW_DRINK -->
+      <!--BUTTON THAT ADDS DRINKS FROM /SHOW_DRINK -->
       <div class="d-grid gap-2 col-8 mx-auto">
         <div class="btn-group-vertical btn-group-lg" role="group">
-            <div action="/drink/{{ drinkName }}" id="add-drink" method="POST" class="btn btn-outline-success btn-lg">Add Drink</div>
+            <button action="/drink/{{ drinkName }}" id="add-drink" method="POST" class="btn btn-outline-success btn-lg">Add Drink</>
           <form action="/drink/{{ drinkName }}" id="add-drink" method="POST">
           </form>
     </div>
