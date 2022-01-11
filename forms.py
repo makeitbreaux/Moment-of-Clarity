@@ -70,6 +70,5 @@ class LoginForm(FlaskForm):
     """Login form."""
 
     username = StringField('Username', validators=[DataRequired()])
-    # Jen: why validate to min=6? you should have register form's password field
-    # also have same min lenght validation
+    
     password = PasswordField('Password', validators=[Length(min=4)]) 

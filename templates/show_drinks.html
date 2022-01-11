@@ -20,11 +20,18 @@
       <!--BUTTON THAT ADDS DRINKS FROM /SHOW_DRINK -->
       <div class="d-grid gap-2 col-8 mx-auto">
         <div class="btn-group-vertical btn-group-lg" role="group">
-            <button action="/drink/{{ drinkName }}" id="add-drink" method="POST" class="btn btn-outline-success btn-lg">Add Drink</>
-          <form action="/drink/{{ drinkName }}" id="add-drink" method="POST">
+
+          <form action="/drink/{{ drink_name }}"  method="POST">
+            <button action="/drink/{{ drink_name }}" id="add-drink" method="POST" class="btn btn-outline-success btn-lg add-drink">Add Drink</>
           </form>
+
+
+            <form action="/drink/{{ drink_name }}/delete" method="POST">
+              <button class="btn btn-outline-danger btn-lg" >Delete Drink</>
+            </form>
     </div>
   </div>
+  
 
 </div>
 <div class="col-md-8">

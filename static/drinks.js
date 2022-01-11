@@ -1,12 +1,11 @@
 // TRYING TO GET DELETE BUTTON ON /SHOW_DRINKS TO WORK
-$('#delete-drink').click(deleteDrink)
+// $('#delete-drink').click(deleteDrink)
 
-async function deleteDrink(e) {
-  e.preventDefault();
-  const drink_name = $(this).data('drink_name')
-  await axios.delete(`/drink/${drink_name}`)
-  $(this).parent().pop()
-}
+// async function deleteDrink(drink_name) {
+//   const drink_name = $(this).data('drink_name')
+//   await axios.delete(`/drinks/${drink_name}`)
+//   $(this).parent().pop()
+// }
 
 $('#add-drink').click(addDrink)
 
@@ -31,11 +30,18 @@ async function addDrink(e) {
     measures,
     image_thumb
   });
-
+ //DISABLE BUTTON AFTER DRINK ADDED
   $('#add-drink').attr("disabled", true);
+
 }
 
-// TRYING TO GET BUTTON TO DISABLE AFTER CLICK
-// function disableAddButton = (e) => {
-//   $('#add-drink').prop('disabled', true)
-// };
+
+// function makeDELETErequest() {
+//   $.ajax({
+//       url: 'test.html',
+//       type: 'DELETE',
+//       success: function (result) {
+//           // Do something with the result
+//       }
+//   });
+// }

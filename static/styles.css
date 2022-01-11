@@ -1,4 +1,7 @@
 /* navbar color: #798777
 other colors: #A2B29F, #BDD2B6, #F8EDE3 */
 
-
+#add-drink button:disabled,
+button[disabled] {
+    background-color: gray;
+}

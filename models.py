@@ -39,13 +39,11 @@ class User(db.Model):
     email = db.Column(db.Text, 
                       nullable=False)
     
-    # drinks = db.relationship('Drink', backref="users")
-    # drinks = db.relationship('Drink', backref='users', lazy=True)
     drinks = db.Column(
         db.Integer,
         db.ForeignKey('users.id', ondelete="cascade"),
-        primary_key=True,
-    ), db.relationship('Drink', backref="users")
+        primary_key=True
+    ), db.relationship('Drink', backref="drinks")
     
     @classmethod
     def register(cls, username, password, first_name, last_name, email):
@@ -63,7 +61,7 @@ class User(db.Model):
 
         db.session.add(user)
         return user
-        # # return instance of user w/username and hashed pwd
+        # return instance of user w/username and hashed pwd
         # return cls(username=username, password=hashed_utf8, first_name=first_name, last_name=last_name, email=email)
 
     @classmethod
@@ -99,9 +97,6 @@ class Drink(db.Model):
     user_id = db.Column(db.Integer, 
                         db.ForeignKey('users.id')) 
     
-    user_drink_id = db.Column(db.Integer, 
-                              db.ForeignKey('user_drinks.id'))
-    
     drink_name = db.Column(db.String)
     
     tags = db.Column(db.String)
@@ -136,22 +131,4 @@ class Drink(db.Model):
     def __repr__(self):
         return f"<Drink {self.id}, drinkName={self.drink_name}, category={self.category}, glass={self.glass}, instructions={self.instructions}, ingredients={self.ingredients}, measures={self.measures}, imageThumb={self.image_thumb}>"
 
-# ADDED THIS TABLE TO TRY AND TIE USERS TO THE DRINKS THEY CREATE
-class UserDrinks(db.Model):
-    """Model for table that shows a user's drinks"""
-    __tablename__ = 'user_drinks'
-    
-    id = db.Column(db.Integer, 
-                   primary_key=True, 
-                   autoincrement=True)
-    
-    user_id = db.Column(db.Integer, 
-                        db.ForeignKey('users.id'))
-    
-    drink_id = db.Column(db.Integer,
-                         db.ForeignKey('drinks.id'))
-    
-    drink_name = db.Column(db.String)
-    
-    user = db.relationship('User', backref="users")
-    drink = db.relationship('Drink', foreign_keys="Drink.user_drink_id", backref="drinks")
+

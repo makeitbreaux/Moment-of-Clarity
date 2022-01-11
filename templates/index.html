@@ -27,14 +27,14 @@
     <div class="carousel-item active ">
       <img src="{{ randomDrinks[0].image }}" class="mx-auto d-block w-25" alt="...">
       <div class="carousel-caption">
-        <h5> <a href="/drink/{{randomDrinks[0].drinkName}}"> {{ randomDrinks[0].drinkName }} </a> </h5>
+        <h5> <a href="/drink/{{randomDrinks[0].drink_name}}"> {{ randomDrinks[0].drink_name }} </a> </h5>
       </div>
     </div>
     {% for drink in randomDrinks[1:] %}
     <div class="carousel-item">
       <img src=" {{ drink.image }} " class="mx-auto d-block w-25" alt="...">
       <div class="carousel-caption">
-        <h5> <a href="/drink/{{drink.drinkName}}"> {{ drink.drinkName }} </a> </h5>
+        <h5> <a href="/drink/{{drink.drink_name}}"> {{ drink.drink_name }} </a> </h5>
       </div>
     </div>
     {% endfor %}

@@ -18,7 +18,7 @@ app.config["SECRET_KEY"] = "abc123"
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 CURR_USER_KEY = "user_id" # "curr_user"
-API_BASE_URL = "http://www.thecocktaildb.com/api/json/v2/9973533"
+API_BASE_URL = "https://www.thecocktaildb.com/api/json/v2/9973533"
 toolbar = DebugToolbarExtension(app)
 database = "postgresql:///drinks"
 
@@ -40,27 +40,27 @@ def index_page():
     data = res.json()
     def transformDrinks(drink):
         image = drink["strDrinkThumb"]
-        drinkName = drink["strDrink"]
-        randomDrink = {'image': image, 'drinkName': drinkName}
+        drink_name = drink["strDrink"]
+        randomDrink = {'image': image, 'drink_name': drink_name}
         return randomDrink
     randomDrinks = list(map(transformDrinks, data["drinks"]))
     return render_template('index.html', randomDrinks=randomDrinks)
 
 @app.route('/drink', methods=["POST"])
 def get_drink_form():
-    drinkName = request.form['strDrink']
-    return redirect(f"/drink/{drinkName}")
+    drink_name = request.form['strDrink']
+    return redirect(f"/drink/{drink_name}")
 
-@app.route('/drink/<string:drinkName>', methods=["GET"])
-def get_drink(drinkName):
+@app.route('/drink/<string:drink_name>', methods=["GET"])
+def get_drink(drink_name):
     """Returns all information for specified drink, filters out alcoholic ingredients, displays information on a page."""
     key = '9973533'
-    res = requests.get(f"{API_BASE_URL}/search.php?s={drinkName}",
-                       params={'key': key, 'strDrink': drinkName})
+    res = requests.get(f"{API_BASE_URL}/search.php?s={drink_name}",
+                       params={'key': key, 'strDrink': drink_name})
     data = res.json()
 
     id = data["drinks"][0]["idDrink"]
-    drinkName = data["drinks"][0]["strDrink"]
+    drink_name = data["drinks"][0]["strDrink"]
     tags = data["drinks"][0]["strTags"]
     category = data["drinks"][0]["strCategory"]
     image = data["drinks"][0]["strDrinkThumb"]
@@ -80,23 +80,33 @@ def get_drink(drinkName):
             isAlcoholic = determine_alcoholic(ingredient)
             if (not isAlcoholic):
                 ingredients.append(f"{measure or ''} {ingredient}")
-        drink = { 'id': id, 'name': drinkName, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions, 'ingredients':ingredients} 
-           
-    return render_template('show_drinks.html', drink=drink, ingredients=ingredients)
+        drink = { 'id': id, 'name': drink_name, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions, 'ingredients':ingredients} 
+# I SPENT HOURS TRYING TO FIGURE THIS OUT AND CANNOT AND I DO NOT KNOW WHY    
+    # def has_user_saved_drink(result):     
+    #     result = Drink.query().filter_by(Drink.user_id == session[CURR_USER_KEY], Drink.drink_name == drink_name).limit(25)
+    #     if has_user_saved_drink() == True:
+    #         flash(f"Drink Already Saved", "danger")
+    #     else:
+            
+        return render_template('show_drinks.html', drink=drink, ingredients=ingredients)
     
-@app.route('/drink/<string:drinkName>/delete', methods=["GET", "POST"])
-def delete_drink(drinkName):
+@app.route('/drink/<string:drink_name>/delete', methods=["POST"])
+def delete_drink(drink_name):
     """Deletes a particular drink"""
-    drink = Drink.query.filter_by(drinkName=drinkName).first()
+    
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    
+    drink = Drink.query.filter(drink_name)
+    if drink.user_id != g.user.id:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
 
-    if drink:
-            db.session.delete(drink)
-            db.session.commit()
-            flash(f"Drink Deleted")
-            return redirect('/recipes')
-
-
-    return redirect("/recipes")
+    db.session.delete(drink)
+    db.session.commit()
+    flash(f"Drink Deleted", "success")
+    return redirect('/')
     
 @app.route('/recipes', methods=["GET"])
 def show_saved_drinks():
@@ -136,8 +146,7 @@ def add_drink():
     if request.method == 'POST': 
         # request is from the add_drink button (data from API)
         if request.json is not None:
-            # user_id = request.json.get("user_id")
-            drinkName = request.json.get("drink_name")
+            drink_name = request.json.get("drink_name")
             tags = request.json.get("tags")
             category = request.json.get("category")
             glass = request.json.get("glass")
@@ -148,7 +157,7 @@ def add_drink():
 
         # request is from the add_drink form (data is manually inputted)
         elif request.form is not None:
-            drinkName = request.form.get("drink_name")
+            drink_name = request.form.get("drink_name")
             tags = request.form.get("tags")
             category = request.form.get("category")
             glass = request.form.get("glass")
@@ -157,7 +166,7 @@ def add_drink():
             measures = request.form.get("measures")
             imageThumb = request.form.get("image_thumb")
 
-        new_drink = Drink(user_id=session[CURR_USER_KEY], drink_name=drinkName, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures=measures, image_thumb=imageThumb)
+        new_drink = Drink(user_id=session[CURR_USER_KEY], drink_name=drink_name, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures=measures, image_thumb=imageThumb)
         db.session.add(new_drink)
         db.session.commit()
         flash('Drink Added!', "success")
