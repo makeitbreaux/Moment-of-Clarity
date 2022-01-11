@@ -81,6 +81,7 @@ def get_drink(drink_name):
             if (not isAlcoholic):
                 ingredients.append(f"{measure or ''} {ingredient}")
         drink = { 'id': id, 'name': drink_name, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions, 'ingredients':ingredients} 
+
 # I SPENT HOURS TRYING TO FIGURE THIS OUT AND CANNOT AND I DO NOT KNOW WHY    
     # def has_user_saved_drink(result):     
     #     result = Drink.query().filter_by(Drink.user_id == session[CURR_USER_KEY], Drink.drink_name == drink_name).limit(25)
@@ -91,6 +92,7 @@ def get_drink(drink_name):
         return render_template('show_drinks.html', drink=drink, ingredients=ingredients)
     
 @app.route('/drink/<string:drink_name>/delete', methods=["POST"])
+# I CANNOT SEEM TO GET THIS TO SELECT THE DRINKS PROPERLY IN ORDER TO DELETE THEM
 def delete_drink(drink_name):
     """Deletes a particular drink"""
     

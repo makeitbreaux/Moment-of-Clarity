@@ -17,7 +17,6 @@
       <img id="drink_image_thumb" src=" {{ drink['image'] }} " style="width: 100%;" class="card-img-top" alt="...">
       <h3 id="drink_name" class="card-title">{{ drink['name'] }}</h3>
 
-      <!--BUTTON THAT ADDS DRINKS FROM /SHOW_DRINK -->
       <div class="d-grid gap-2 col-8 mx-auto">
         <div class="btn-group-vertical btn-group-lg" role="group">
 
@@ -25,10 +24,10 @@
             <button action="/drink/{{ drink_name }}" id="add-drink" method="POST" class="btn btn-outline-success btn-lg add-drink">Add Drink</>
           </form>
 
-
-            <form action="/drink/{{ drink_name }}/delete" method="POST">
-              <button class="btn btn-outline-danger btn-lg" >Delete Drink</>
-            </form>
+<!-- THIS IS WHERE I ADDED THE DELETE BUTTON, IT MADE SENSE TO PUT IT HERE BUT NOW I AM NOT SO SURE -->
+          <form action="/drink/{{ drink_name }}/delete" method="POST">
+            <button class="btn btn-outline-danger btn-lg" >Delete Drink</>
+          </form>
     </div>
   </div>
   
