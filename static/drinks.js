@@ -1,11 +1,12 @@
 // TRYING TO GET DELETE BUTTON ON /SHOW_DRINKS TO WORK
-// $('#delete-drink').click(deleteDrink)
+$('#delete-drink').click(deleteDrink)
 
-// async function deleteDrink(drink_name) {
-//   const drink_name = $(this).data('drink_name')
-//   await axios.delete(`/drinks/${drink_name}`)
-//   $(this).parent().pop()
-// }
+async function deleteDrink(drink_name) {
+  console.log("delete-drink has been called")
+  const drink_name = $(this).data('drink_name')
+  await axios.delete(`/drinks/${drink_name}`)
+  $(this).parent().pop()
+}
 
 $('#add-drink').click(addDrink)
 
@@ -36,12 +37,3 @@ async function addDrink(e) {
 }
 
 
-// function makeDELETErequest() {
-//   $.ajax({
-//       url: 'test.html',
-//       type: 'DELETE',
-//       success: function (result) {
-//           // Do something with the result
-//       }
-//   });
-// }

@@ -18,7 +18,7 @@ app.config["SECRET_KEY"] = "abc123"
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 CURR_USER_KEY = "user_id" # "curr_user"
-API_BASE_URL = "https://www.thecocktaildb.com/api/json/v2/9973533"
+API_BASE_URL = "http://www.thecocktaildb.com/api/json/v2/9973533"
 toolbar = DebugToolbarExtension(app)
 database = "postgresql:///drinks"
 
@@ -91,34 +91,30 @@ def get_drink(drink_name):
             
         return render_template('show_drinks.html', drink=drink, ingredients=ingredients)
     
-@app.route('/drink/<string:drink_name>/delete', methods=["POST"])
+@app.route('/drink/<string:drink_name>/delete', methods=["DELETE"])
 # I CANNOT SEEM TO GET THIS TO SELECT THE DRINKS PROPERLY IN ORDER TO DELETE THEM
 def delete_drink(drink_name):
     """Deletes a particular drink"""
     
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
-    
-    drink = Drink.query.filter(drink_name)
-    if drink.user_id != g.user.id:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
-
-    db.session.delete(drink)
-    db.session.commit()
+    # if not g.user:
+    #     flash("Access unauthorized.", "danger")
+    #     return redirect("/")
+    print("I got here")
+    drink = Drink.query.get(drink_name)
+    if drink is not None:
+        db.session.delete(drink)
+        db.session.commit()
     flash(f"Drink Deleted", "success")
     return redirect('/')
     
 @app.route('/recipes', methods=["GET"])
 def show_saved_drinks():
     """Shows drinks saved in DB.""" 
-    # JEN: we don't want to show all drinks, BUT only drinks that is tied to user
 
     search = request.args.get('drink_name')
 
     if not search:
-        drinks = Drink.query.all()
+        drinks = Drink.query.filter_by(user_id=session[CURR_USER_KEY]).limit(25).all()
     else:
         drinks = Drink.query.filter(Drink.drink_name.like(f"%{search}%")).all()
     return render_template("recipes.html", drinks=drinks)
@@ -135,11 +131,9 @@ def add_drink():
     # UNTIL LINE 129 IS ANOTHER ATTEMPT AT CHECKING DB FOR EXISTING DRINK. ADDING A DRINK DOES NOT WORK WITH THIS CODE
     
     # drink_name = request.json.get("drink_name") 
-    # drink_exists = db.session.query(Drink.drink_name).filter_by(name= drink_name).first() is not None
+  
     
-    # if drink_exists is not None:
-    #     flash('Drink already saved!', "danger")
-    # elif drink_exists is None:
+
         
     if request.method == 'GET':
             form = DrinkAddForm(request.form)
@@ -167,6 +161,11 @@ def add_drink():
             ingredients = request.form.get("ingredients")
             measures = request.form.get("measures")
             imageThumb = request.form.get("image_thumb")
+
+        drink_exists = Drink.query.filter_by(user_id=session[CURR_USER_KEY]).first()
+
+        if drink_exists is not None:
+            flash('Drink already saved!', "danger")
 
         new_drink = Drink(user_id=session[CURR_USER_KEY], drink_name=drink_name, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures=measures, image_thumb=imageThumb)
         db.session.add(new_drink)
