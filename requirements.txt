@@ -31,11 +31,9 @@ flask-requests
 Flask-Session
 Flask-SQLAlchemy
 Flask-WTF
-forex-python
 Frozen-Flask
 future
 gevent
-greenle
 gunicorn
 httplib2
 hyperlink
