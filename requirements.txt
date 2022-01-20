@@ -107,5 +107,3 @@ wcwidth==0.1.7
 Werkzeug==2.0.2
 WTForms==2.2.1
 zipp==1.0.0
-zope.event==4.5.0
-zope.interface==4.7.1
