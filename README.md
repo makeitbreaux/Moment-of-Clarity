@@ -29,7 +29,7 @@ Logged in, users have access to the same features, as well as:
 * At any point, using the navigation bar, the user can check their favorited drinks, add a new drink to their favorite, edit or delete their profile, or log out
 
 ### API
-The data I used was from the [TheCocktailDB](https://www.thecocktaildb.com/api.php?ref=apilist.fun). My database schema will include tables that consist of drink type, ingredients, the color of the drink, photos of the drink, and possibly more columns, which I am sure I will figure out the names as I go.
+The data I used was from the [TheCocktailDB](https://www.thecocktaildb.com/api.php?ref=apilist.fun).
 
 ## Technologies Used
 
