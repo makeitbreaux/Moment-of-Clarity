@@ -1,10 +1,45 @@
-# Moment of Clarity
+# Moment of Clarity - Alcohol Free Drinks Guide
 A mocktail website that offers alcohol-free alternatives for all of your old alcoholic favorites!
 
-The goal of my website is to offer people in sobriety, or people considering sobriety, a guide to alcohol-free mocktails. The sober/sober-curious will be able to type in their old favorite alcoholic drink and be presented with the alcohol-free version. They will also have the ability to save their favorite drinks to their database, and in the future, I would like to try to include a shop option, where users can pick the ingredients needed to make their mocktails and purchase them online. It is my hope that this website will be able to help people that are just journeying into sobriety make their social outings a little less awkward, or even enhance a nice alcohol-free evening in.
-
-The data I plan on using will be from the TheCocktailDB (https://www.thecocktaildb.com/api.php?ref=apilist.fun). My database schema will include tables that consist of drink type, ingredients, the color of the drink, photos of the drink, and possibly more columns, which I am sure I will figure out the names as I go.
-
-The issue that I am expecting to have with the API is only being able to query for non-alcoholic drinks without being able to break those drinks down by each individual ingredient. I am expecting to have to write the logic to ensure I can display all ingredients in each mocktail. The sensitive information I will need to secure is the user login info, and possibly their card information IF I am able to add the shop functionality work for my website. The functionality will be users being able to login in and see their favorite mocktails that they have saved to their mocktail database, and an option to purchase those ingredients online. I am thus far undecided on the user flow, but I have full confidence that I will figure it out as I go. The stretch goal is the shop functionality, and I feel that this functionality will really push my website past a basic CRUD site.
-
 ![MoCAnimation](https://user-images.githubusercontent.com/72421941/149238861-2728f484-a2a1-4542-96e8-61718db2e389.gif)
+
+## Description
+
+This is my first capstone project for Springboard's Software Engineering Career Track. The goal of my website is to offer people in sobriety, or people considering sobriety, a guide to alcohol-free mocktails. The sober/sober-curious will be able to type in their old favorite alcoholic drink and be presented with the alcohol-free version. 
+
+## Features
+
+Not logged in, users have access to:
+
+* Search for drinks by name
+* Browse a short list of randomnly selected alcohol-free mocktails
+
+Logged in, users have access to the same features, as well as:
+
+* Saving their favorite alcohol free mocktails to their favorites list
+* Adding their own alcohol free mocktails to their favorites list
+* Removing their favorited drinks
+
+## User Flow
+
+* A user can log in or create a new account; upon successful registration, user is redirected to app index page
+* On the index page, a short list of drinks is listed in a carousel and a search box is presented to search specific drinks
+* Upon searching a drink or clicking on a random presented drink, the logged in user has the ability to favorite the drink, from here the user can search another drink, go to the index page, or check their favorited drinks
+* From the favorited drinks end point, the user can delete the drinks of their choosing
+* At any point, using the navigation bar, the user can check their favorited drinks, add a new drink to their favorite, edit or delete their profile, or log out
+
+### API
+The data I used was from the [TheCocktailDB](https://www.thecocktaildb.com/api.php?ref=apilist.fun).
+
+## Technologies Used
+
+The main technologies I used to build Moment of Clarity were Python, and I used [Flask](https://github.com/pallets/flask) as a framework, and for the ORM I used[SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy). For the database, I used [PostgreSql](https://github.com/postgres/postgres).
+
+Several Flask extensions were used in creating MoC, including [Flask-SQLAlchemy](https://github.com/pallets/flask-sqlalchemy), [Flask-WTForms](https://github.com/lepture/flask-wtf), and [Flask-Bcrypt](https://github.com/maxcountryman/flask-bcrypt).
+
+## Looking Forward
+While the capstone project hit all of the requirments, there are a few more features I'd like to add to enhance the User Experience:
+* Google Sign-In Option
+* Shop: Users will be able to purchase ingredients for their mocktails online
+* Cross-Device Visitor Identification: Users will be able to access their favorite MoC-Tails from all of their devices
+
