@@ -5,3 +5,28 @@ other colors: #A2B29F, #BDD2B6, #F8EDE3 */
 button[disabled] {
     background-color: gray;
 }
+
+.carousel-control-next,
+.carousel-control-prev,
+.carousel-control-next-icon,
+.carousel-control-prev-icon {
+  width: 3vw;
+  height: 3vw;
+  padding:2%;
+}
+
+.carousel-caption {
+    position: absolute;
+	bottom: 0;
+	z-index: 9;
+	max-height: 50%;
+    font-size: 1rem;
+    padding: 2% 2% 2%;
+}
+
+#block-under-image {
+    background-color: white;
+    padding: 2%;
+    height: 9em;
+}
+

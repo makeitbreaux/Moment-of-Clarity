@@ -9,15 +9,18 @@
   <div class="row justify-content-center">
     <h3 class="text-center">Search For Drink</h3>
   </div>
-  <div class="row justify-content-center">
+  <div class="row justify-content-center form-group">
 
-      <ul class="list-group">
-        <form action="/drink" method="POST">
-          <label for="name">Name</label>
-          <input type="text" id="strDrink" class="mx-auto" name="strDrink" autofocus />
-          <button>Search</button>
+     
+        <form action="/drink" method="POST" class="form-inline">
+          <div class="form-group">
+          <label for="name" >Name</label>
+          <input type="text" id="strDrink" class="form-control sm" name="strDrink" autofocus />
+        </div>
+          <button class="btn btn-outline-success btn-lg">Search</button>
+        
         </form>
-      </ul>
+  
     </div>
 
 </div>
@@ -26,24 +29,26 @@
   <div class="carousel-inner">
     <div class="carousel-item active ">
       <img src="{{ randomDrinks[0].image }}" class="mx-auto d-block w-25" alt="...">
+      <p id="block-under-image"></p>
       <div class="carousel-caption">
-        <h5> <a href="/drink/{{randomDrinks[0].drink_name}}"> {{ randomDrinks[0].drink_name }} </a> </h5>
+        <h5 > <a href="/drink/{{randomDrinks[0].drink_name}}"> {{ randomDrinks[0].drink_name }} </a> </h5>
       </div>
     </div>
     {% for drink in randomDrinks[1:] %}
     <div class="carousel-item">
       <img src=" {{ drink.image }} " class="mx-auto d-block w-25" alt="...">
+      <p id="block-under-image"></p>
       <div class="carousel-caption">
         <h5> <a href="/drink/{{drink.drink_name}}"> {{ drink.drink_name }} </a> </h5>
       </div>
     </div>
     {% endfor %}
   </div>
-  <button class="carousel-control-prev" style="background-color: #798777; type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+  <button class="carousel-control-prev" style="background-color: #798777;" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Previous</span>
   </button>
-  <button class="carousel-control-next" style="background-color: #798777; type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+  <button class="carousel-control-next" style="background-color: #798777;" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Next</span>
   </button>
