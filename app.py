@@ -1,3 +1,4 @@
+import os
 from logging import raiseExceptions
 from re import template
 from flask import Flask, render_template, redirect, session, flash, jsonify, g, request
@@ -11,10 +12,13 @@ from alcoholic import alcoholicIngredients
 
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///drinks"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+    'DATABASE_URL', 'postgres://urjgfrhqkcvgev:8a6a712b66f7bb01f9619561d8eb70ed39803c898c0389783b76b9b46d98dd82@ec2-18-204-101-137.compute-1.amazonaws.com:5432/d1guaubm1orft3')
+# app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///drinks"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = True
-app.config["SECRET_KEY"] = "abc123"
+# app.config["SECRET_KEY"] = "abc123"
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'shh')
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 CURR_USER_KEY = "user_id" # "curr_user"
