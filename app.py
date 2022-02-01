@@ -136,15 +136,7 @@ def add_drink():
     # TODO: check to see if drink exists by searching by drink `name`
     # TODO: if drink does not exist, then add it to drink table
     # TODO: if drink exists, then get drink id
-    # TODO: with drink id, tie it to user id
     # TODO: handle error
-    
-    # UNTIL LINE 129 IS ANOTHER ATTEMPT AT CHECKING DB FOR EXISTING DRINK. ADDING A DRINK DOES NOT WORK WITH THIS CODE
-    
-    # drink_name = request.json.get("drink_name") 
-  
-    
-
         
     if request.method == 'GET':
             form = DrinkAddForm(request.form)
@@ -173,10 +165,10 @@ def add_drink():
             measures = request.form.get("measures")
             imageThumb = request.form.get("image_thumb")
 
-        drink_exists = Drink.query.filter_by(user_id=session[CURR_USER_KEY]).first()
+        # drink_exists = Drink.query.filter_by(user_id=session[CURR_USER_KEY]).first()
 
-        if drink_exists is not None:
-            flash('Drink already saved!', "danger")
+        # if drink_exists is not None:
+        #     flash('Drink already saved!', "danger")
 
         new_drink = Drink(user_id=session[CURR_USER_KEY], drink_name=drink_name, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures=measures, image_thumb=imageThumb)
         db.session.add(new_drink)
