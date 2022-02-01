@@ -23,21 +23,16 @@ class User(db.Model):
                    primary_key=True, 
                    autoincrement=True)
     
-    username = db.Column(db.Text, 
-                         nullable=False, 
+    username = db.Column(db.String, 
                          unique=True)
     
-    first_name = db.Column(db.Text, 
-                           nullable=False)
+    first_name = db.Column(db.String)
     
-    last_name = db.Column(db.Text, 
-                          nullable=False)
+    last_name = db.Column(db.String)
     
-    password = db.Column(db.Text, 
-                         nullable=False)
+    password = db.Column(db.String)
     
-    email = db.Column(db.Text, 
-                      nullable=False)
+    email = db.Column(db.String)
     
     drinks = db.Column(
         db.Integer,
