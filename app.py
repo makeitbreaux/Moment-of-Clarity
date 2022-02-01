@@ -1,5 +1,5 @@
 import os
-# import re
+import re
 from logging import raiseExceptions
 from re import template
 from flask import Flask, render_template, redirect, session, flash, jsonify, g, request
@@ -13,12 +13,11 @@ from alcoholic import alcoholicIngredients
 
 app = Flask(__name__)
 
-# uri = os.getenv("DATABASE_URL")  # or other relevant config var
-# if uri.startswith("postgres://"):
-#     uri = uri.replace("postgres://", "postgresql://", 1)
-# # rest of connection code using the connection string `uri`
+uri = os.getenv("DATABASE_URL")  # or other relevant config var
+if uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
+# rest of connection code using the connection string `uri`
 
-SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL?sslmode=require').replace('postgres://', 'postgresql://')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     'DATABASE_URL', 'postgresql://urjgfrhqkcvgev:8a6a712b66f7bb01f9619561d8eb70ed39803c898c0389783b76b9b46d98dd82@ec2-18-204-101-137.compute-1.amazonaws.com:5432/d1guaubm1orft3')
