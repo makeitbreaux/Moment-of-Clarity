@@ -38,7 +38,7 @@ The main technologies I used to build Moment of Clarity were Python, and I used 
 Several Flask extensions were used in creating MoC, including [Flask-SQLAlchemy](https://github.com/pallets/flask-sqlalchemy), [Flask-WTForms](https://github.com/lepture/flask-wtf), and [Flask-Bcrypt](https://github.com/maxcountryman/flask-bcrypt).
 
 ## Looking Forward
-While the capstone project hit all of the requirments, there are a few more features I'd like to add to enhance the User Experience:
+While the capstone project hit all of the requirements, there are a few more features I'd like to add to enhance the User Experience:
 * Google Sign-In Option
 * Shop: Users will be able to purchase ingredients for their mocktails online
 * Cross-Device Visitor Identification: Users will be able to access their favorite MoC-Tails from all of their devices
