@@ -42,4 +42,4 @@ While the capstone project hit all of the requirements, there are a few more fea
 * Google Sign-In Option
 * Shop: Users will be able to purchase ingredients for their mocktails online
 * Cross-Device Visitor Identification: Users will be able to access their favorite MoC-Tails from all of their devices
-
+* Add alternative ingredients for alcoholic ingredients [would involve building own API]
