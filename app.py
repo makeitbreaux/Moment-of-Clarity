@@ -92,31 +92,35 @@ def get_drink(drink_name):
             if (not isAlcoholic):
                 ingredients.append(f"{measure or ''} {ingredient}")
         drink = { 'id': id, 'name': drink_name, 'tags':tags, 'category': category, 'image': image, 'glass': glass, 'instructions': instructions, 'ingredients':ingredients} 
-
-# I SPENT HOURS TRYING TO FIGURE THIS OUT AND CANNOT AND I DO NOT KNOW WHY    
-    # def has_user_saved_drink(result):     
-    #     result = Drink.query().filter_by(Drink.user_id == session[CURR_USER_KEY], Drink.drink_name == drink_name).limit(25)
-    #     if has_user_saved_drink() == True:
-    #         flash(f"Drink Already Saved", "danger")
-    #     else:
             
         return render_template('show_drinks.html', drink=drink, ingredients=ingredients)
     
-@app.route('/drink/<string:drink_name>/delete', methods=["DELETE"])
+@app.route('/recipes', methods=["DELETE"])
 # I CANNOT SEEM TO GET THIS TO SELECT THE DRINKS PROPERLY IN ORDER TO DELETE THEM
 def delete_drink(drink_name):
     """Deletes a particular drink"""
+    res = requests('/recipes')
+    data = res.json()
     
-    # if not g.user:
-    #     flash("Access unauthorized.", "danger")
-    #     return redirect("/")
-    print("I got here")
-    drink = Drink.query.get(drink_name)
-    if drink is not None:
-        db.session.delete(drink)
+    id = data["id"]
+    if request.method == 'DELETE': 
+        # request is from the add_drink button (data from API)
+
+        drink_name = request.json.get("drink_name")
+        tags = request.json.get("tags")
+        category = request.json.get("category")
+        glass = request.json.get("glass")
+        instructions = request.json.get("instructions")
+        ingredients = request.json.get("ingredients")
+        measures = request.json.get("measures")
+        imageThumb = request.json.get("image_thumb")
+        
+        delete_drink = Drink(id = id, user_id=session[CURR_USER_KEY], drink_name=drink_name, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures=measures, image_thumb=imageThumb)
+    
+        db.session.delete(delete_drink)
         db.session.commit()
     flash(f"Drink Deleted", "success")
-    return redirect('/')
+    return redirect('/recipes')
     
 @app.route('/recipes', methods=["GET"])
 def show_saved_drinks():
@@ -133,10 +137,6 @@ def show_saved_drinks():
 @app.route('/add_drink', methods=["GET", "POST"])
 def add_drink():
     """Using form found in navbar, user enters info into DrinkAddForm and submits a drink to DB. Also handles "Add Drink" button in /show_drinks"""
-    # TODO: check to see if drink exists by searching by drink `name`
-    # TODO: if drink does not exist, then add it to drink table
-    # TODO: if drink exists, then get drink id
-    # TODO: handle error
         
     if request.method == 'GET':
             form = DrinkAddForm(request.form)
@@ -164,11 +164,6 @@ def add_drink():
             ingredients = request.form.get("ingredients")
             measures = request.form.get("measures")
             imageThumb = request.form.get("image_thumb")
-
-        # drink_exists = Drink.query.filter_by(user_id=session[CURR_USER_KEY]).first()
-
-        # if drink_exists is not None:
-        #     flash('Drink already saved!', "danger")
 
         new_drink = Drink(user_id=session[CURR_USER_KEY], drink_name=drink_name, tags=tags, category=category, glass=glass, instructions=instructions, ingredients=ingredients, measures=measures, image_thumb=imageThumb)
         db.session.add(new_drink)
